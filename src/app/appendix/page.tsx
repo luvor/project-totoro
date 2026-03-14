@@ -1,5 +1,6 @@
 import {
   AppendixTable,
+  FooterPortal,
   PageMasthead,
   PageSection,
   SourceDisclosure,
@@ -234,6 +235,10 @@ export default function AppendixPage() {
             label="Ключевые evidence anchors"
           />
         </PageSection>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <FooterPortal />
       </ScrollReveal>
     </main>
   );

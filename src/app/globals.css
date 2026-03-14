@@ -224,6 +224,8 @@ ul {
   align-items: flex-start;
   justify-content: space-between;
   gap: 14px;
+  padding: 0 6px;
+  margin-bottom: 8px;
 }
 
 .hero-overline,
@@ -791,9 +793,28 @@ h3 {
 }
 
 .table-shell {
+  position: relative;
   overflow-x: auto;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
+}
+
+.table-shell::after {
+  content: "scroll →";
+  display: none;
+  position: sticky;
+  left: 0;
+  padding: 6px 14px;
+  font-size: 0.75rem;
+  color: var(--muted);
+  text-align: center;
+  pointer-events: none;
+}
+
+@media (max-width: 780px) {
+  .table-shell::after {
+    display: block;
+  }
 }
 
 table {
@@ -1175,6 +1196,9 @@ tr:last-child td {
   .page-title-block h1 {
     max-width: 100%;
     font-size: clamp(2.5rem, 12vw, 4.2rem);
+    overflow-wrap: break-word;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   h2 {

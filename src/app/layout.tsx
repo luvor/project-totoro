@@ -14,9 +14,9 @@ const displayFont = Unbounded({
 });
 
 export const metadata: Metadata = {
-  title: "Тепловое Кольцо",
+  title: "Project Totoro",
   description:
-    "Концепт нового тёплого района на краю Астаны: зимняя урбанистика, тепловое ядро, low-car мобильность и реализуемая арктическая утопия.",
+    "Многостраничный атлас климатического города: flagship-район, версии развития, три сценария климатической машины и appendix с provenance.",
   icons: {
     icon: "/icon.svg"
   }

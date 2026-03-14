@@ -1,0 +1,104 @@
+[
+  {
+    "id": "edmonton-strategy",
+    "title": "Edmonton WinterCity Strategy",
+    "url": "https://www.edmonton.ca/city_government/initiatives_innovation/wintercity-strategy",
+    "note": "Зимняя идентичность города, общественная жизнь и качество улиц."
+  },
+  {
+    "id": "edmonton-guidelines",
+    "title": "Edmonton Winter Design Guidelines",
+    "url": "https://www.edmonton.ca/sites/default/files/public-files/WinterCityDesignGuidelines_draft.pdf",
+    "note": "Практические правила по ветру, солнцу, микроклимату и зимним маршрутам."
+  },
+  {
+    "id": "financial-report",
+    "title": "Financial Stability Report of Kazakhstan 2024",
+    "url": "https://nationalbank.kz/file/download/114475",
+    "note": "Ориентиры по казахстанскому рынку и строительному контексту."
+  },
+  {
+    "id": "bns-build",
+    "title": "BNS Kazakhstan Construction Statistics 2025",
+    "url": "https://stat.gov.kz/en/industries/business-statistics/stat-inno-build/publications/413420/",
+    "note": "Базовые ориентиры по стройке и вводу."
+  },
+  {
+    "id": "world-bank-dh",
+    "title": "World Bank Direct-Use Geothermal and District Heating",
+    "url": "https://documents1.worldbank.org/curated/en/099041723045541665/pdf/P17436403d07210800b1b60ccb0bd9304a9.pdf",
+    "note": "CAPEX, LCOH и логика district heating."
+  },
+  {
+    "id": "harvard-energy",
+    "title": "Harvard District Energy Implementation Plan",
+    "url": "https://clinics.law.harvard.edu/environment/files/2019/05/Team-5-District-Energy-Imp.Plan-FS-FINAL.pdf",
+    "note": "Реализация, фазирование и структура district energy."
+  },
+  {
+    "id": "who-green",
+    "title": "WHO Urban Green Spaces and Health",
+    "url": "https://www.who.int/europe/publications/i/item/WHO-EURO-2016-3352-43111-60341",
+    "note": "Связь зелёной инфраструктуры и здоровья."
+  },
+  {
+    "id": "who-urban-planning",
+    "title": "WHO Linking Health and Urban Planning",
+    "url": "https://www.who.int/europe/activities/promoting-healthy-active-mobility/linking-health-and-urban-planning",
+    "note": "Доказательные городские прокси здоровья и активной мобильности."
+  },
+  {
+    "id": "who-age-friendly",
+    "title": "WHO Global Age-friendly Cities Guide",
+    "url": "https://www.who.int/publications/i/item/9789241547307",
+    "note": "Среда для старения без изоляции и барьеров."
+  },
+  {
+    "id": "cdc-activity",
+    "title": "CDC Activity-Friendly Communities",
+    "url": "https://www.cdc.gov/physical-activity/features/designing-activity-friendly-communities.html",
+    "note": "Проектные решения для движения как части повседневности."
+  },
+  {
+    "id": "nih-vitamin-d",
+    "title": "NIH Vitamin D Fact Sheet",
+    "url": "https://ods.od.nih.gov/factsheets/VitaminD-HealthProfessional/",
+    "note": "Осторожная рамка для claims про daylight и витамин D."
+  },
+  {
+    "id": "iaea-cogeneration",
+    "title": "IAEA Industrial Applications and Nuclear Cogeneration",
+    "url": "https://www.iaea.org/topics/non-electric-applications/industrial-applications-and-nuclear-cogeneration",
+    "note": "Официальная рамка по nuclear cogeneration и district heating."
+  },
+  {
+    "id": "iaea-non-electric",
+    "title": "IAEA Non-Electric Applications of Nuclear Power",
+    "url": "https://www.iaea.org/newscenter/news/the-use-of-nuclear-power-beyond-generating-electricity-non-electric-applications",
+    "note": "Примеры использования атомной энергии для тепла и district heating."
+  },
+  {
+    "id": "world-nuclear-heat",
+    "title": "World Nuclear Association: Nuclear Process Heat for Industry",
+    "url": "https://world-nuclear.org/Information-Library/Non-power-nuclear-applications/Industry/Nuclear-Process-Heat-for-Industry",
+    "note": "District heating, process heat и long-distance heat supply."
+  },
+  {
+    "id": "doe-district-cooling",
+    "title": "DOE Geothermal District Heating & Cooling",
+    "url": "https://www.energy.gov/hgeo/geothermal/geothermal-district-heating-cooling",
+    "note": "District-scale heating and cooling as public infrastructure."
+  },
+  {
+    "id": "doe-thermal-storage",
+    "title": "DOE Thermal Energy Storage",
+    "url": "https://www.energy.gov/eere/buildings/thermal-energy-storage",
+    "note": "Хранение тепла и холода для устойчивости и peak shaving."
+  },
+  {
+    "id": "doe-zero-energy-districts",
+    "title": "DOE Zero Energy Districts & Communities",
+    "url": "https://www.energy.gov/eere/buildings/zero-energy-districts-communities-technologies-strategies",
+    "note": "District thermal systems, shared storage и diverse demand."
+  }
+]

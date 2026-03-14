@@ -1,0 +1,130 @@
+[
+  {
+    "id": "hybrid-chp",
+    "label": "M1",
+    "title": "Hybrid Climate CHP",
+    "summary": "Наиболее реалистичный сценарий: гибридное ядро тепла и прохлады с тепловыми насосами, waste heat, электрокотлами, буферами и резервом.",
+    "winterMode": "Крупные тепловые насосы и waste heat держат базу, электрокотлы и резерв закрывают пики, 36-часовой буфер сглаживает экстремумы.",
+    "shoulderMode": "Storage и насосы закрывают основную нагрузку, газовый резерв уходит в фон, а civic-ядро работает в мягком mixed-mode.",
+    "summerMode": "District cooling для civic-узлов и mixed-use фронта, night purge, seasonal charging и прохладные общественные интерьеры.",
+    "failureMode": "Локальные буферы и разделение на контуры позволяют району деградировать частично, а не коллапсировать целиком.",
+    "dependencies": "Средняя зависимость от внешней электросети и умеренная зависимость от топлива для редкого резерва.",
+    "capexBand": "base",
+    "riskProfile": "Наименьший риск по срокам реализации, но нужна дисциплина по эксплуатации и maintenance.",
+    "publicProgram": [
+      "термы и бани на низкопотенциальном тепле",
+      "библиотека и рынок в климатическом атриуме",
+      "климатическая диспетчерская и музей инженерии"
+    ],
+    "technologyMix": [
+      { "label": "Тепловые насосы", "share": 36 },
+      { "label": "Waste heat", "share": 18 },
+      { "label": "Электрокотлы", "share": 14 },
+      { "label": "Storage", "share": 14 },
+      { "label": "Резерв", "share": 18 }
+    ],
+    "externalDependencies": "Городская электросеть, waste-heat якоря, резервное топливо и операционный контур.",
+    "publicLifeImplications": "Самое жизнеспособное ядро как ежедневная городская гостиная.",
+    "status": "estimate",
+    "confidence": "high",
+    "sourceIds": ["world-bank-dh", "harvard-energy", "doe-district-cooling", "doe-thermal-storage"]
+  },
+  {
+    "id": "nuclear-fed-loop",
+    "label": "M2",
+    "title": "Nuclear-Fed Regional Climate Loop",
+    "summary": "Атомная станция вынесена за пределы района; в городе работает только климатический узел обмена, буферов, cooling и public-programming.",
+    "winterMode": "Тепловой отбор и/или электрическая опора от региональной АЭС идут в городской климатический собор, где сеть распределяет тепло по кварталам.",
+    "shoulderMode": "Тепловой отбор снижается, растёт роль электричества, storage и гибкого городского контура.",
+    "summerMode": "Heat take-off падает, а система переключается на ГВС, общественные термы, summer cooling через absorption/electric chillers и сезонное хранение.",
+    "failureMode": "Критична внешняя магистральная зависимость; для устойчивости нужны локальные буферы, резерв и собственные городские backup-контуры.",
+    "dependencies": "Высокая зависимость от внешней магистральной энергетической инфраструктуры, регулятора и межведомственной координации.",
+    "capexBand": "upper-mid",
+    "riskProfile": "Высокий политико-регуляторный риск, но потенциально очень сильный долгосрочный low-carbon контур.",
+    "publicProgram": [
+      "климатический атриум и winter garden",
+      "термы, бассейн и семейные бани",
+      "галерея объяснения атомного сценария человеческим языком"
+    ],
+    "technologyMix": [
+      { "label": "Региональный атомный ввод", "share": 42 },
+      { "label": "Теплообмен и буфер", "share": 16 },
+      { "label": "Absorption cooling", "share": 12 },
+      { "label": "Electric cooling", "share": 10 },
+      { "label": "Local backup", "share": 20 }
+    ],
+    "summerStates": [
+      {
+        "id": "mild-day",
+        "label": "Тёплый день",
+        "summary": "Тепловой отбор уже снизился, но район ещё активно пользуется storage, ГВС и мягким cooling.",
+        "mix": [
+          { "label": "ГВС и базовое тепло", "share": 28 },
+          { "label": "Cooling commons", "share": 24 },
+          { "label": "Seasonal storage", "share": 18 },
+          { "label": "Public baths / pools", "share": 12 },
+          { "label": "Экспорт энергии", "share": 18 }
+        ]
+      },
+      {
+        "id": "hot-week",
+        "label": "Жаркая неделя",
+        "summary": "Главный акцент уходит в district cooling, прохладные общественные убежища и сглаживание пиков через storage.",
+        "mix": [
+          { "label": "Cooling commons", "share": 34 },
+          { "label": "Seasonal storage", "share": 20 },
+          { "label": "ГВС", "share": 16 },
+          { "label": "Public baths / pools", "share": 10 },
+          { "label": "Экспорт энергии", "share": 20 }
+        ]
+      },
+      {
+        "id": "late-summer",
+        "label": "Позднее лето",
+        "summary": "Heat take-off минимален, электрическая роль выше, а часть контура работает на заряд storage перед новым холодным циклом.",
+        "mix": [
+          { "label": "Экспорт энергии", "share": 34 },
+          { "label": "Seasonal storage", "share": 22 },
+          { "label": "Cooling commons", "share": 18 },
+          { "label": "ГВС", "share": 16 },
+          { "label": "Public baths / pools", "share": 10 }
+        ]
+      }
+    ],
+    "externalDependencies": "Внешняя АЭС, магистральный тепловой или электрический контур, локальный backup.",
+    "publicLifeImplications": "Сильный символический и образовательный потенциал, но коммуникация рисков должна быть предельно ясной.",
+    "status": "concept",
+    "confidence": "medium",
+    "sourceIds": ["iaea-cogeneration", "iaea-non-electric", "world-nuclear-heat", "doe-district-cooling"]
+  },
+  {
+    "id": "all-electric-loop",
+    "label": "M3",
+    "title": "All-Electric Regenerative Loop",
+    "summary": "Максимально электрический район с тепловыми насосами, ambient loops и сезонным возвратом летнего тепла в зимний контур.",
+    "winterMode": "Ставка на мощные тепловые насосы, borehole/aquifer storage, локальные буферы и резервируемую сеть.",
+    "shoulderMode": "Самый гибкий режим: обмен между кварталами, заряд seasonal storage и мягкий переход между heating и cooling.",
+    "summerMode": "Летнее тепло от охлаждения уходит в сезонный контур, civic-узлы и mixed-use фронт охлаждаются централизованно.",
+    "failureMode": "Критична устойчивость электросети; без резервов сценарий уязвим к долгим outages.",
+    "dependencies": "Очень высокая зависимость от надёжной низкоуглеродной электросети и storage-инфраструктуры.",
+    "capexBand": "high",
+    "riskProfile": "Сильный технологический потенциал, но выше требование к grid capacity и операционной зрелости.",
+    "publicProgram": [
+      "energy gallery с видимыми geothermal и storage-интерфейсами",
+      "cool commons и летние библиотеки прохлады",
+      "интерактивный климатический учебный центр"
+    ],
+    "technologyMix": [
+      { "label": "Heat pumps", "share": 44 },
+      { "label": "Ambient loops", "share": 18 },
+      { "label": "Seasonal storage", "share": 18 },
+      { "label": "Electric boilers", "share": 10 },
+      { "label": "Backup", "share": 10 }
+    ],
+    "externalDependencies": "Мощная электросеть, storage, grid-responsive control и резервный контур.",
+    "publicLifeImplications": "Даёт самую тихую и clean-feeling машину, если инфраструктура действительно тянет.",
+    "status": "concept",
+    "confidence": "medium",
+    "sourceIds": ["doe-district-cooling", "doe-thermal-storage", "doe-zero-energy-districts"]
+  }
+]

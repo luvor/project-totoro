@@ -1,188 +1,240 @@
-import Link from "next/link";
 import {
-  benchmarkNotes,
-  costScenario,
-  districtSpec,
-  energyCoreSpec,
-  phases,
-  rules,
-  sections,
-  sources
-} from "@/data/concept";
-import { CostTable, Eyebrow, ScenarioSummary, formatPerSquareMeter, formatTenge } from "@/components/site-blocks";
+  AppendixTable,
+  PageMasthead,
+  PageSection,
+  SourceDisclosure,
+  TrustLegend,
+  formatPeople,
+  formatSquareMeters
+} from "@/components/atlas-ui";
+import { PrintButton, ScrollReveal, SectionDivider } from "@/components/atlas-interactives";
+import { claims, district, machines, metrics, rules, sources, trustLegend, variants } from "@/data/atlas";
 
 export const metadata = {
-  title: "Тепловое Кольцо — Appendix",
-  description: "Печатное приложение с цифрами, правилами и допущениями по концепту Тепловое Кольцо."
+  title: "Project Totoro — Appendix",
+  description: "Печатное приложение с provenance, методикой, цифрами, версиями и машинными сценариями проекта."
 };
 
 export default function AppendixPage() {
   return (
-    <main className="appendix-page">
-      <div className="appendix-header">
-        <div>
-          <Eyebrow>Printable appendix</Eyebrow>
-          <h1>Тепловое Кольцо — цифры, допущения и правила</h1>
-          <p>
-            Отдельный print-friendly view с параметрами района, CAPEX-структурой, фазированием и benchmark-ссылками.
-          </p>
-        </div>
-        <Link href="/" className="button-secondary">
-          Вернуться к лонгриду
-        </Link>
+    <main className="atlas-page appendix-page">
+      <div className="page-backdrop" aria-hidden="true" />
+      <div className="gradient-mesh" aria-hidden="true" />
+      <PageMasthead
+        page="Appendix"
+        title="Provenance, методика и проверяемые цифры"
+        description="Print-friendly слой проекта: здесь собираются метрики, claims, machine scenarios, версии развития, риски и ссылки на опорные источники."
+      />
+
+      <div className="appendix-actions">
+        <PrintButton />
       </div>
 
-      <section className="appendix-block">
-        <h2>1. Базовая модель района</h2>
-        <div className="appendix-grid">
-          <article>
-            <span>Население</span>
-            <strong>{new Intl.NumberFormat("ru-RU").format(districtSpec.residents)}</strong>
-          </article>
-          <article>
-            <span>Площадь</span>
-            <strong>{districtSpec.areaKm2} км²</strong>
-          </article>
-          <article>
-            <span>Общий GFA</span>
-            <strong>{new Intl.NumberFormat("ru-RU").format(districtSpec.grossFloorAreaM2)} м²</strong>
-          </article>
-          <article>
-            <span>Плотность</span>
-            <strong>{districtSpec.densityPerHa} жителей/га</strong>
-          </article>
-          <article>
-            <span>Тепловая нагрузка</span>
-            <strong>{energyCoreSpec.thermalLoadMwth}</strong>
-          </article>
-          <article>
-            <span>Периметр mobility</span>
-            <strong>{districtSpec.tramLoopKm} км кольца</strong>
-          </article>
-        </div>
-      </section>
-
-      <section className="appendix-block">
-        <h2>2. CAPEX и unit economics</h2>
-        <ScenarioSummary scenario={costScenario} />
-        <div className="appendix-grid narrow">
-          <article>
-            <span>Low / resident</span>
-            <strong>{formatTenge(costScenario.perResident.low)}</strong>
-          </article>
-          <article>
-            <span>Base / resident</span>
-            <strong>{formatTenge(costScenario.perResident.base)}</strong>
-          </article>
-          <article>
-            <span>High / resident</span>
-            <strong>{formatTenge(costScenario.perResident.high)}</strong>
-          </article>
-          <article>
-            <span>Base / GFA</span>
-            <strong>{formatPerSquareMeter(costScenario.perM2.base)}</strong>
-          </article>
-        </div>
-        <CostTable scenario={costScenario} />
-      </section>
-
-      <section className="appendix-block">
-        <h2>3. Что включено и что исключено</h2>
-        <div className="appendix-columns">
-          <article className="paper-card">
-            <h3>Included</h3>
-            <ul>
-              {costScenario.included.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-          <article className="paper-card">
-            <h3>Excluded</h3>
-            <ul>
-              {costScenario.excluded.map((item) => (
-                <li key={item}>{item}</li>
-              ))}
-            </ul>
-          </article>
-        </div>
-      </section>
-
-      <section className="appendix-block">
-        <h2>4. Фазирование</h2>
-        <div className="appendix-columns">
-          {phases.map((phase) => (
-            <article key={phase.phase} className="paper-card">
-              <span>{phase.phase}</span>
-              <h3>{phase.residents}</h3>
-              <p>{phase.focus}</p>
-              <strong>{formatTenge(phase.capex)}</strong>
-              <small>{phase.unlock}</small>
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Flagship Model"
+          title="Базовая модель района"
+          text="Эти параметры не обещают вечную истину, но фиксируют каноническую версию flagship-сценария, от которой отталкивается весь атлас."
+        >
+          <div className="comparison-grid">
+            <article className="comparison-card">
+              <span>Население</span>
+              <strong>{formatPeople(district.residents)}</strong>
+              <p>Три волны развития и шесть кварталов.</p>
             </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="appendix-block">
-        <h2>5. Правила города</h2>
-        <div className="appendix-rule-list">
-          {rules.map((rule) => (
-            <article key={rule.title} className="paper-card">
-              <h3>{rule.title}</h3>
-              <p>{rule.cannotDo}</p>
-              <p>{rule.mustDo}</p>
-              <strong>{rule.metric}</strong>
-              <small>{rule.failureMode}</small>
+            <article className="comparison-card">
+              <span>Площадь</span>
+              <strong>{district.areaKm2} км²</strong>
+              <p>Greenfield-район с компактной climate mesh.</p>
             </article>
-          ))}
-        </div>
-      </section>
+            <article className="comparison-card">
+              <span>GFA</span>
+              <strong>{formatSquareMeters(district.grossFloorAreaM2)}</strong>
+              <p>Среднеэтажная mixed-use плотность без башенного поля.</p>
+            </article>
+            <article className="comparison-card">
+              <span>Public realm</span>
+              <strong>{district.publicRealmSharePct}%</strong>
+              <p>Улицы, сады, площади и protected routes.</p>
+            </article>
+          </div>
+        </PageSection>
+      </ScrollReveal>
 
-      <section className="appendix-block">
-        <h2>6. Допущения и benchmark notes</h2>
-        <div className="paper-card">
-          <ul>
-            {costScenario.assumptions.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <div className="note-stack">
-            {benchmarkNotes.map((note) => (
-              <p key={note}>{note}</p>
+      <SectionDivider variant="glow" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Trust Legend"
+          title="Что здесь benchmark, estimate, assumption и concept"
+          text="Этот слой нужен не для формальности. Он отделяет проверяемые числа и референсы от проектных гипотез и делает narrative более честным."
+        >
+          <TrustLegend items={trustLegend} />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="fade" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Metrics"
+          title="Метрики и происхождение"
+          text="Для каждой метрики фиксируются статус, confidence, источник, формула и owner. Это базовый минимум для decision-ready longread."
+        >
+          <AppendixTable
+            columns={["ID", "Метка", "Значение", "Status", "Confidence", "Formula", "Owner"]}
+            rows={metrics.map((metric) => [
+              metric.id,
+              metric.label,
+              `${metric.value}${metric.unit === "residents" ? "" : ` ${metric.unit}`}`,
+              metric.status,
+              metric.confidence,
+              metric.formula,
+              metric.owner
+            ])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="wave" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Claims"
+          title="Ключевые тезисы и их границы"
+          text="Claims не должны звучать сильнее, чем они реально доказаны. Поэтому каждый тезис хранит why-it-matters и limits."
+        >
+          <AppendixTable
+            columns={["ID", "Тезис", "Status", "Confidence", "Почему важно", "Граница"]}
+            rows={claims.map((claim) => [
+              claim.id,
+              claim.text,
+              claim.status,
+              claim.confidence,
+              claim.whyItMatters,
+              claim.limits
+            ])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="glow" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Versions"
+          title="Портфель версий"
+          text="Все версии сравниваются по одной логике, а не разными словами для разных moodboards."
+        >
+          <AppendixTable
+            columns={["ID", "Title", "Population", "Area", "Cost position", "Best use case", "Tradeoff"]}
+            rows={variants.map((variant) => [
+              variant.label,
+              variant.title,
+              variant.population,
+              variant.area,
+              variant.costPosition,
+              variant.bestUseCase,
+              variant.tradeoffs
+            ])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="fade" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Machines"
+          title="Machine scenarios"
+          text="У каждой машины зафиксированы seasonal modes, risk profile, public life implications и внешние зависимости."
+        >
+          <AppendixTable
+            columns={["ID", "Title", "Зима", "Лето", "Failure mode", "Dependencies", "CAPEX"]}
+            rows={machines.map((machine) => [
+              machine.label,
+              machine.title,
+              machine.winterMode,
+              machine.summerMode,
+              machine.failureMode,
+              machine.dependencies,
+              machine.capexBand
+            ])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="wave" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Rulebook"
+          title="Правила города"
+          text="Кодекс фиксирует запрет, позитивное требование и failure mode. Это помогает превратить идею в реальный design brief."
+        >
+          <AppendixTable
+            columns={["ID", "Rule", "Season", "Нельзя", "Нужно", "Проверка", "Failure mode"]}
+            rows={rules.map((rule) => [
+              rule.id,
+              rule.title,
+              rule.season,
+              rule.cannotDo,
+              rule.mustDo,
+              rule.metric,
+              rule.failureMode
+            ])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="glow" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Phasing"
+          title="Фазирование flagship-сценария"
+          text="Каждая волна заканчивает рабочий кусок города и не оставляет жителя жить в вечной прелюдии к следующей очереди."
+        >
+          <AppendixTable
+            columns={["Phase", "Residents", "CAPEX", "Focus", "Unlock"]}
+            rows={district.phases.map((phase) => [phase.label, phase.residents, phase.capex, phase.focus, phase.unlock])}
+          />
+        </PageSection>
+      </ScrollReveal>
+
+      <SectionDivider variant="fade" />
+
+      <ScrollReveal>
+        <PageSection
+          eyebrow="Sources"
+          title="Источник опор и evidence anchors"
+          text="Ключевые ссылки вынесены в отдельный блок, чтобы понятнее читать происхождение идей, правил и health-claims."
+        >
+          <div className="card-grid two">
+            {sources.map((source) => (
+              <article key={source.id} className="reason-card">
+                <h3>{source.title}</h3>
+                <p>{source.note}</p>
+                <a href={source.url} target="_blank" rel="noreferrer">
+                  {source.url}
+                </a>
+              </article>
             ))}
           </div>
-        </div>
-      </section>
-
-      <section className="appendix-block">
-        <h2>7. Источники по разделам</h2>
-        <div className="appendix-rule-list">
-          {sections.map((section) => (
-            <article key={section.id} className="paper-card">
-              <h3>{section.title}</h3>
-              <p>{section.narrativeGoal}</p>
-              <small>Визуалы: {section.visuals.join(", ")}</small>
-              <ul>
-                {section.sources.map((sourceId) => {
-                  const source = sources.find((entry) => entry.id === sourceId);
-
-                  if (!source) {
-                    return null;
-                  }
-
-                  return (
-                    <li key={source.id}>
-                      <a href={source.url} target="_blank" rel="noreferrer">
-                        {source.title}
-                      </a>
-                    </li>
-                  );
-                })}
-              </ul>
-            </article>
-          ))}
-        </div>
-      </section>
+          <SourceDisclosure
+            sourceIds={[
+              "who-green",
+              "who-urban-planning",
+              "who-age-friendly",
+              "cdc-activity",
+              "nih-vitamin-d",
+              "world-bank-dh",
+              "iaea-cogeneration"
+            ]}
+            label="Ключевые evidence anchors"
+          />
+        </PageSection>
+      </ScrollReveal>
     </main>
   );
 }

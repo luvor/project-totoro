@@ -1,12 +1,16 @@
 # Тепловое Кольцо
 
-Русский статический микросайт на `Next.js` про концепт нового холодноклиматического района на краю Астаны.
+Русский статический atlas-site на `Next.js` про семейство климатических городских сценариев для холодного климата.
 
 ## Что внутри
 
-- лонгрид с 8 секциями и data-driven SVG-визуалами
-- отдельный print-friendly `appendix`
-- typed-данные в [`src/data/concept.ts`](./src/data/concept.ts)
+- главная flagship-история на `/`
+- лаборатория версий на `/versions/`
+- лаборатория климатических машин на `/machines/`
+- print-friendly provenance appendix на `/appendix/`
+- structured content в [`content/`](./content/)
+- typed data-layer в [`src/data/atlas.ts`](./src/data/atlas.ts)
+- prebuild validation через `npm run atlas:check`
 - static export через `next build`
 
 ## Запуск
@@ -23,6 +27,7 @@ npm run dev
 ```bash
 source ~/.nvm/nvm.sh
 nvm use 24.14.0
+npm run atlas:check
 npm run build
 ```
 
@@ -30,8 +35,13 @@ npm run build
 
 ## Структура
 
-- `src/app/page.tsx` — основной лонгрид
-- `src/app/appendix/page.tsx` — printable appendix
-- `src/components/visuals.tsx` — все обязательные SVG-схемы
-- `src/components/site-blocks.tsx` — повторно используемые контентные блоки
-- `src/data/concept.ts` — все параметры района, правила, CAPEX и ссылки на benchmark-источники
+- `content/*.json` — source of truth для версий, машин, метрик, claims, правил и персонажей
+- `src/data/atlas.ts` — typed data-layer и derived helpers
+- `src/app/page.tsx` — flagship-longread
+- `src/app/versions/page.tsx` — compare-страница для версий развития
+- `src/app/machines/page.tsx` — compare-страница для machine scenarios
+- `src/app/appendix/page.tsx` — методика, provenance, таблицы и печать
+- `src/components/atlas-ui.tsx` — shared editorial UI и trust-компоненты
+- `src/components/atlas-interactives.tsx` — client-side интерактивы
+- `src/components/atlas-visuals.tsx` — SVG-atlas visuals
+- `scripts/build.mjs` — prebuild validation контента

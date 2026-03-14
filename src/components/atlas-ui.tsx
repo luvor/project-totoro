@@ -27,6 +27,7 @@ export function PageMasthead({
 }) {
   return (
     <header className="page-masthead">
+      <div className="masthead-particles" aria-hidden="true" />
       <div className="site-topline">
         <Link href="/" className="brand-mark">
           Project Totoro

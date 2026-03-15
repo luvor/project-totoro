@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   AnimatedMetricStrip,
   CostPanel,
@@ -19,6 +18,7 @@ import {
   MetricStrip,
   PageSection,
   SectionLinks,
+  SiteTopline,
   SourceDisclosure,
   TrustLegend
 } from "@/components/atlas-ui";
@@ -34,23 +34,13 @@ const flourishingMetrics = metrics.filter((metric) =>
 
 export default function Home() {
   return (
-    <main className="atlas-page">
+    <main className="atlas-page" id="main-content">
       <div className="page-backdrop" aria-hidden="true" />
       <div className="gradient-mesh" aria-hidden="true" />
 
       <header className="home-hero-shell" id="hero">
         <div className="hero-particles" aria-hidden="true" />
-        <div className="site-topline">
-          <Link href="/" className="brand-mark">
-            Project Totoro
-          </Link>
-          <nav className="page-links" aria-label="Навигация по страницам">
-            <Link href="/">Flagship</Link>
-            <Link href="/versions/">Versions</Link>
-            <Link href="/machines/">Machines</Link>
-            <Link href="/appendix/">Appendix</Link>
-          </nav>
-        </div>
+        <SiteTopline activePage="Flagship" />
         <div className="home-hero-grid">
           <HeroDial modes={district.climateModes} headline={district.name} intro={district.coreClaim} />
         </div>
@@ -60,15 +50,18 @@ export default function Home() {
       <SectionLinks links={mainSections.map((section) => ({ href: `#${section.id}`, label: section.label }))} />
 
       <ScrollReveal>
-        <div id="story" className="story-band">
-          {district.promises.map((promise) => (
-            <article key={promise.title} className="story-card">
-              <span className="kicker">Обещание</span>
-              <h3>{promise.title}</h3>
-              <p>{promise.detail}</p>
-            </article>
-          ))}
-        </div>
+        <section id="story" aria-label="Обещания района">
+          <h2 className="sr-only">Обещания</h2>
+          <div className="story-band">
+            {district.promises.map((promise) => (
+              <article key={promise.title} className="story-card">
+                <span className="kicker">Обещание</span>
+                <h3>{promise.title}</h3>
+                <p>{promise.detail}</p>
+              </article>
+            ))}
+          </div>
+        </section>
       </ScrollReveal>
 
       <SectionDivider variant="glow" />

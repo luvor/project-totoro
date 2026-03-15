@@ -1,9 +1,11 @@
 import { ScrollReveal, SectionDivider, VersionMatrix } from "@/components/atlas-interactives";
 import {
+  ConfidenceBadge,
   FooterPortal,
   PageMasthead,
   PageSection,
-  SourceDisclosure
+  SourceDisclosure,
+  TrustBadge
 } from "@/components/atlas-ui";
 import { variants } from "@/data/atlas";
 
@@ -14,7 +16,7 @@ export const metadata = {
 
 export default function VersionsPage() {
   return (
-    <main className="atlas-page">
+    <main className="atlas-page" id="main-content">
       <div className="page-backdrop" aria-hidden="true" />
       <div className="gradient-mesh" aria-hidden="true" />
       <PageMasthead
@@ -49,8 +51,8 @@ export default function VersionsPage() {
                     {variant.label} · {variant.title}
                   </h3>
                   <div className="trust-pair">
-                    <span className={`trust-badge trust-${variant.status}`}>{variant.status}</span>
-                    <span className={`confidence-badge confidence-${variant.confidence}`}>{variant.confidence}</span>
+                    <TrustBadge status={variant.status} />
+                    <ConfidenceBadge confidence={variant.confidence} />
                   </div>
                 </div>
                 <p>{variant.coreIdea}</p>

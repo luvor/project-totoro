@@ -5,6 +5,7 @@ import type {
   ClimateMode,
   ClimateModeId,
   ClimateRule,
+  ConfidenceLevel,
   CostScenario,
   MachineSpec,
   MachineSummerState,
@@ -13,6 +14,7 @@ import type {
   PhaseSpec,
   QuarterSpec,
   RiskScenario,
+  TrustStatus,
   VariantSpec
 } from "@/data/atlas";
 import {
@@ -100,6 +102,8 @@ export function CountUp({
     const el = ref.current;
     if (!el || !isAnimatable) return;
 
+    let cancelled = false;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasRun.current) {
@@ -110,9 +114,9 @@ export function CountUp({
           const isInt = Number.isInteger(targetNum);
 
           function tick(now: number) {
+            if (cancelled) return;
             const elapsed = now - start;
             const progress = Math.min(elapsed / duration, 1);
-            // Ease out cubic
             const eased = 1 - Math.pow(1 - progress, 3);
             const current = targetNum * eased;
             const formatted = isInt
@@ -133,7 +137,10 @@ export function CountUp({
       { threshold: 0.3 }
     );
     observer.observe(el);
-    return () => observer.disconnect();
+    return () => {
+      cancelled = true;
+      observer.disconnect();
+    };
   }, [value, duration, targetNum, isAnimatable, restStr]);
 
   return (
@@ -166,11 +173,43 @@ function SegmentedTabs<T extends string>({
 }) {
   const listId = useId();
 
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const currentIndex = items.findIndex((item) => item.id === value);
+    let nextIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        nextIndex = (currentIndex + 1) % items.length;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+        break;
+      case "Home":
+        e.preventDefault();
+        nextIndex = 0;
+        break;
+      case "End":
+        e.preventDefault();
+        nextIndex = items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    onChange(items[nextIndex].id);
+    const nextTabId = `${listId}-${items[nextIndex].id}`;
+    const nextEl = document.getElementById(nextTabId);
+    nextEl?.focus();
+  }
+
   return (
-    <div className="segmented-tabs" role="tablist" aria-label={label} id={listId}>
+    <div className="segmented-tabs" role="tablist" aria-label={label} id={listId} onKeyDown={handleKeyDown}>
       {items.map((item) => {
         const tabId = `${listId}-${item.id}`;
-        const panelId = `${tabId}-panel`;
         const active = item.id === value;
 
         return (
@@ -180,11 +219,81 @@ function SegmentedTabs<T extends string>({
             type="button"
             role="tab"
             aria-selected={active}
-            aria-controls={panelId}
+            tabIndex={active ? 0 : -1}
             className={active ? "is-active" : undefined}
             onClick={() => onChange(item.id)}
           >
             {item.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function PillGrid<T extends string>({
+  items,
+  value,
+  onChange,
+  label,
+  renderItem
+}: {
+  items: Array<{ id: T; [key: string]: unknown }>;
+  value: T;
+  onChange: (next: T) => void;
+  label: string;
+  renderItem: (item: { id: T; [key: string]: unknown }, active: boolean) => React.ReactNode;
+}) {
+  const gridId = useId();
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLDivElement>) {
+    const currentIndex = items.findIndex((item) => item.id === value);
+    let nextIndex = currentIndex;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowDown":
+        e.preventDefault();
+        nextIndex = (currentIndex + 1) % items.length;
+        break;
+      case "ArrowLeft":
+      case "ArrowUp":
+        e.preventDefault();
+        nextIndex = (currentIndex - 1 + items.length) % items.length;
+        break;
+      case "Home":
+        e.preventDefault();
+        nextIndex = 0;
+        break;
+      case "End":
+        e.preventDefault();
+        nextIndex = items.length - 1;
+        break;
+      default:
+        return;
+    }
+
+    onChange(items[nextIndex].id);
+    const nextEl = document.getElementById(`${gridId}-${items[nextIndex].id}`);
+    nextEl?.focus();
+  }
+
+  return (
+    <div className="pill-grid" role="tablist" aria-label={label} onKeyDown={handleKeyDown}>
+      {items.map((item) => {
+        const active = item.id === value;
+        return (
+          <button
+            key={item.id}
+            id={`${gridId}-${item.id}`}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            tabIndex={active ? 0 : -1}
+            className={`quarter-pill ${active ? "is-active" : ""}`.trim()}
+            onClick={() => onChange(item.id)}
+          >
+            {renderItem(item, active)}
           </button>
         );
       })}
@@ -201,7 +310,7 @@ export function HeroDial({
   headline: string;
   intro: string;
 }) {
-  const [activeMode, setActiveMode] = useState<ClimateModeId>(modes[0].id);
+  const [activeMode, setActiveMode] = useState<ClimateModeId>(modes[0]?.id ?? "winter");
   const current = modes.find((mode) => mode.id === activeMode) ?? modes[0];
 
   return (
@@ -265,24 +374,18 @@ export function MasterplanExplorer({
           onChange={setActiveMode}
           label="Сезоны генплана"
         />
-        <div className="pill-grid" role="tablist" aria-label="Кварталы района">
-          {quarters.map((item) => {
-            const active = item.id === activeQuarterId;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                className={`quarter-pill ${active ? "is-active" : ""}`.trim()}
-                onClick={() => setActiveQuarterId(item.id)}
-              >
-                <span>{item.shortLabel}</span>
-                <strong>{item.title}</strong>
-              </button>
-            );
-          })}
-        </div>
+        <PillGrid
+          items={quarters}
+          value={activeQuarterId}
+          onChange={setActiveQuarterId}
+          label="Кварталы района"
+          renderItem={(item) => (
+            <>
+              <span>{(item as QuarterSpec).shortLabel}</span>
+              <strong>{(item as QuarterSpec).title}</strong>
+            </>
+          )}
+        />
         <article className="explorer-card">
           <div className="card-header-row">
             <h3>{quarter.title}</h3>
@@ -333,24 +436,18 @@ export function PersonaRoutesExplorer({ personas }: { personas: PersonaSpec[] })
           onChange={setActiveSeason}
           label="Сезоны повседневности"
         />
-        <div className="pill-grid" role="tablist" aria-label="Персоны">
-          {personas.map((item) => {
-            const active = item.id === activePersonaId;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                className={`quarter-pill ${active ? "is-active" : ""}`.trim()}
-                onClick={() => setActivePersonaId(item.id)}
-              >
-                <strong>{item.name}</strong>
-                <span>{item.summary}</span>
-              </button>
-            );
-          })}
-        </div>
+        <PillGrid
+          items={personas}
+          value={activePersonaId}
+          onChange={setActivePersonaId}
+          label="Персоны"
+          renderItem={(item) => (
+            <>
+              <strong>{(item as PersonaSpec).name}</strong>
+              <span>{(item as PersonaSpec).summary}</span>
+            </>
+          )}
+        />
         <article className="explorer-card">
           <div className="card-header-row">
             <h3>{persona.name}</h3>
@@ -565,24 +662,18 @@ export function RulebookOverlay({ rules }: { rules: ClimateRule[] }) {
   return (
     <div className="machine-layout">
       <div className="explorer-sidebar">
-        <div className="pill-grid" role="tablist" aria-label="Кодекс города">
-          {rules.map((item) => {
-            const active = item.id === activeRuleId;
-            return (
-              <button
-                key={item.id}
-                type="button"
-                role="tab"
-                aria-selected={active}
-                className={`quarter-pill ${active ? "is-active" : ""}`.trim()}
-                onClick={() => setActiveRuleId(item.id)}
-              >
-                <strong>{item.title}</strong>
-                <span>{item.season}</span>
-              </button>
-            );
-          })}
-        </div>
+        <PillGrid
+          items={rules}
+          value={activeRuleId}
+          onChange={setActiveRuleId}
+          label="Кодекс города"
+          renderItem={(item) => (
+            <>
+              <strong>{(item as ClimateRule).title}</strong>
+              <span>{(item as ClimateRule).season}</span>
+            </>
+          )}
+        />
         <article className="explorer-card">
           <h3>{rule.title}</h3>
           <p className="callout-negative">{rule.cannotDo}</p>
@@ -776,8 +867,8 @@ export function AnimatedMetricStrip({
     value: string;
     unit: string;
     target: string;
-    status: string;
-    confidence: string;
+    status: TrustStatus;
+    confidence: ConfidenceLevel;
     formula: string;
   }>;
 }) {

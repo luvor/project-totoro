@@ -16,6 +16,35 @@ export function formatCompactNumber(value: number) {
   }).format(value);
 }
 
+export function SiteTopline({ activePage }: { activePage?: string } = {}) {
+  const pages = [
+    { href: "/", label: "Flagship" },
+    { href: "/versions/", label: "Versions" },
+    { href: "/machines/", label: "Machines" },
+    { href: "/appendix/", label: "Appendix" },
+  ];
+
+  return (
+    <div className="site-topline">
+      <Link href="/" className="brand-mark">
+        Project Totoro
+      </Link>
+      <nav className="page-links" aria-label="Навигация по страницам">
+        {pages.map((page) => (
+          <Link
+            key={page.href}
+            href={page.href}
+            aria-current={activePage === page.label ? "page" : undefined}
+            className={activePage === page.label ? "is-current" : undefined}
+          >
+            {page.label}
+          </Link>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
 export function PageMasthead({
   page,
   title,
@@ -28,17 +57,7 @@ export function PageMasthead({
   return (
     <header className="page-masthead">
       <div className="masthead-particles" aria-hidden="true" />
-      <div className="site-topline">
-        <Link href="/" className="brand-mark">
-          Project Totoro
-        </Link>
-        <nav className="page-links" aria-label="Навигация по страницам">
-          <Link href="/">Flagship</Link>
-          <Link href="/versions/">Versions</Link>
-          <Link href="/machines/">Machines</Link>
-          <Link href="/appendix/">Appendix</Link>
-        </nav>
-      </div>
+      <SiteTopline activePage={page} />
       <div className="page-title-block">
         <Eyebrow>{page}</Eyebrow>
         <h1>{title}</h1>

@@ -18,7 +18,7 @@ export const metadata = {
 
 export default function AppendixPage() {
   return (
-    <main className="atlas-page appendix-page">
+    <main className="atlas-page appendix-page" id="main-content">
       <div className="page-backdrop" aria-hidden="true" />
       <div className="gradient-mesh" aria-hidden="true" />
       <PageMasthead

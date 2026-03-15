@@ -167,23 +167,29 @@ export function NuclearSummerGraphic({ state }: { state: MachineSummerState }) {
         {state.label}: {state.summary}
       </text>
 
+      <defs>
+        <clipPath id="bar-clip">
+          <rect x="34" y="82" width="512" height="42" rx="21" />
+        </clipPath>
+      </defs>
       <rect x="34" y="82" width="512" height="42" rx="21" fill="#d7e2dd" />
-      {state.mix.map((item, index) => {
-        const width = item.share * 5.12;
-        const x = 34 + offset;
-        offset += width;
-        return (
-          <rect
-            key={item.label}
-            x={x}
-            y="82"
-            width={width}
-            height="42"
-            rx={index === 0 ? "21" : index === state.mix.length - 1 ? "21" : "0"}
-            fill={colors[index % colors.length]}
-          />
-        );
-      })}
+      <g clipPath="url(#bar-clip)">
+        {state.mix.map((item, index) => {
+          const width = item.share * 5.12;
+          const x = 34 + offset;
+          offset += width;
+          return (
+            <rect
+              key={item.label}
+              x={x}
+              y="82"
+              width={width}
+              height="42"
+              fill={colors[index % colors.length]}
+            />
+          );
+        })}
+      </g>
 
       {state.mix.map((item, index) => {
         const y = 152 + index * 26;

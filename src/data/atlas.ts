@@ -11,7 +11,7 @@ export type TrustStatus = "benchmark" | "estimate" | "assumption" | "concept";
 export type ConfidenceLevel = "low" | "medium" | "high";
 export type ClimateModeId = "winter" | "summer" | "blizzard" | "heat";
 export type PersonaSeason = "winter" | "summer";
-export type MachineCapexBand = "base" | "upper-mid" | "high";
+export type MachineCapexBand = "base" | "upper-mid" | "high" | "low";
 
 export type SourceLink = {
   id: string;
@@ -178,7 +178,7 @@ export type MachineSpec = {
   summerMode: string;
   failureMode: string;
   dependencies: string;
-  capexBand: MachineCapexBand | string;
+  capexBand: MachineCapexBand;
   riskProfile: string;
   publicProgram: string[];
   technologyMix: TechnologyShare[];

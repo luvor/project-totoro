@@ -11,7 +11,7 @@ export default function MachinesPage() {
   const nuclearMachine = machines.find((machine) => machine.id === "nuclear-fed-loop");
 
   return (
-    <main className="atlas-page">
+    <main className="atlas-page" id="main-content">
       <div className="page-backdrop" aria-hidden="true" />
       <div className="gradient-mesh" aria-hidden="true" />
       <PageMasthead

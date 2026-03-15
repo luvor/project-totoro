@@ -29,7 +29,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${bodyFont.variable} ${displayFont.variable}`}>{children}</body>
+      <body className={`${bodyFont.variable} ${displayFont.variable}`}>
+        <a href="#main-content" className="skip-link">
+          Перейти к содержимому
+        </a>
+        {children}
+      </body>
     </html>
   );
 }

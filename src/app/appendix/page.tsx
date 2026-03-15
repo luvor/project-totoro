@@ -238,7 +238,7 @@ export default function AppendixPage() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <FooterPortal />
+        <FooterPortal currentPath="/appendix/" />
       </ScrollReveal>
     </main>
   );

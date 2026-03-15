@@ -164,12 +164,14 @@ function SegmentedTabs<T extends string>({
   items,
   value,
   onChange,
-  label
+  label,
+  panelPrefix
 }: {
   items: Array<{ id: T; label: string }>;
   value: T;
   onChange: (next: T) => void;
   label: string;
+  panelPrefix?: string;
 }) {
   const listId = useId();
 
@@ -211,6 +213,7 @@ function SegmentedTabs<T extends string>({
       {items.map((item) => {
         const tabId = `${listId}-${item.id}`;
         const active = item.id === value;
+        const panelId = panelPrefix ? `${panelPrefix}-${item.id}-panel` : undefined;
 
         return (
           <button
@@ -219,6 +222,7 @@ function SegmentedTabs<T extends string>({
             type="button"
             role="tab"
             aria-selected={active}
+            aria-controls={panelId}
             tabIndex={active ? 0 : -1}
             className={active ? "is-active" : undefined}
             onClick={() => onChange(item.id)}
@@ -310,8 +314,11 @@ export function HeroDial({
   headline: string;
   intro: string;
 }) {
+  const panelPrefix = useId();
   const [activeMode, setActiveMode] = useState<ClimateModeId>(modes[0]?.id ?? "winter");
   const current = modes.find((mode) => mode.id === activeMode) ?? modes[0];
+
+  if (!modes.length) return null;
 
   return (
     <div className="hero-dial-grid">
@@ -330,8 +337,9 @@ export function HeroDial({
           value={activeMode}
           onChange={setActiveMode}
           label="Режимы климата"
+          panelPrefix={panelPrefix}
         />
-        <article className="hero-mode-panel" id={`hero-mode-${activeMode}`}>
+        <article className="hero-mode-panel" role="tabpanel" id={`${panelPrefix}-${activeMode}-panel`}>
           <strong>{current.headline}</strong>
           <p>{current.summary}</p>
         </article>
@@ -361,9 +369,12 @@ export function MasterplanExplorer({
   quarters: QuarterSpec[];
   modes: ClimateMode[];
 }) {
+  const panelPrefix = useId();
   const [activeQuarterId, setActiveQuarterId] = useState(quarters[0]?.id ?? "");
   const [activeMode, setActiveMode] = useState<ClimateModeId>("winter");
   const quarter = quarters.find((item) => item.id === activeQuarterId) ?? quarters[0];
+
+  if (!quarters.length || !modes.length) return null;
 
   return (
     <div className="explorer-layout">
@@ -373,6 +384,7 @@ export function MasterplanExplorer({
           value={activeMode}
           onChange={setActiveMode}
           label="Сезоны генплана"
+          panelPrefix={panelPrefix}
         />
         <PillGrid
           items={quarters}
@@ -408,20 +420,26 @@ export function MasterplanExplorer({
           </dl>
         </article>
       </div>
-      <VisualFrame
-        title="Masterplan Explorer"
-        caption="Квартал и сезон переключаются независимо: так видно, что один и тот же район работает как климатическая система круглый год."
-      >
-        <MasterplanGraphic activeQuarter={quarter} mode={activeMode} />
-      </VisualFrame>
+      <div role="tabpanel" id={`${panelPrefix}-${activeMode}-panel`}>
+        <VisualFrame
+          title="Masterplan Explorer"
+          caption="Квартал и сезон переключаются независимо: так видно, что один и тот же район работает как климатическая система круглый год."
+        >
+          <MasterplanGraphic activeQuarter={quarter} mode={activeMode} />
+        </VisualFrame>
+      </div>
     </div>
   );
 }
 
 export function PersonaRoutesExplorer({ personas }: { personas: PersonaSpec[] }) {
+  const panelPrefix = useId();
   const [activePersonaId, setActivePersonaId] = useState(personas[0]?.id ?? "");
   const [activeSeason, setActiveSeason] = useState<PersonaSeason>("winter");
   const persona = personas.find((item) => item.id === activePersonaId) ?? personas[0];
+
+  if (!personas.length) return null;
+
   const current = persona.seasonRoutes[activeSeason];
 
   return (
@@ -435,6 +453,7 @@ export function PersonaRoutesExplorer({ personas }: { personas: PersonaSpec[] })
           value={activeSeason}
           onChange={setActiveSeason}
           label="Сезоны повседневности"
+          panelPrefix={panelPrefix}
         />
         <PillGrid
           items={personas}
@@ -466,20 +485,26 @@ export function PersonaRoutesExplorer({ personas }: { personas: PersonaSpec[] })
           </dl>
         </article>
       </div>
-      <VisualFrame
-        title="Persona Routes"
-        caption="Город тестируется не одной абстрактной фигурой, а людьми с разными доходами, возрастом и физическими возможностями."
-      >
-        <PersonaRouteGraphic persona={persona} season={activeSeason} />
-      </VisualFrame>
+      <div role="tabpanel" id={`${panelPrefix}-${activeSeason}-panel`}>
+        <VisualFrame
+          title="Persona Routes"
+          caption="Город тестируется не одной абстрактной фигурой, а людьми с разными доходами, возрастом и физическими возможностями."
+        >
+          <PersonaRouteGraphic persona={persona} season={activeSeason} />
+        </VisualFrame>
+      </div>
     </div>
   );
 }
 
 export function MachineSwitcher({ machines }: { machines: MachineSpec[] }) {
+  const machinePanelPrefix = useId();
+  const modePanelPrefix = useId();
   const [activeMachineId, setActiveMachineId] = useState(machines[0]?.id ?? "");
   const [activeMode, setActiveMode] = useState<"winterMode" | "shoulderMode" | "summerMode">("winterMode");
   const machine = machines.find((item) => item.id === activeMachineId) ?? machines[0];
+
+  if (!machines.length) return null;
 
   return (
     <div className="machine-layout">
@@ -489,6 +514,7 @@ export function MachineSwitcher({ machines }: { machines: MachineSpec[] }) {
           value={activeMachineId}
           onChange={setActiveMachineId}
           label="Сценарии центральной машины"
+          panelPrefix={machinePanelPrefix}
         />
         <SegmentedTabs
           items={[
@@ -499,6 +525,7 @@ export function MachineSwitcher({ machines }: { machines: MachineSpec[] }) {
           value={activeMode}
           onChange={setActiveMode}
           label="Режимы машины"
+          panelPrefix={modePanelPrefix}
         />
         <article className="explorer-card">
           <div className="card-header-row">
@@ -526,7 +553,7 @@ export function MachineSwitcher({ machines }: { machines: MachineSpec[] }) {
           <SourceDisclosure sourceIds={machine.sourceIds} label="Источники сценария" />
         </article>
       </div>
-      <div className="visual-stack">
+      <div className="visual-stack" role="tabpanel" id={`${machinePanelPrefix}-${activeMachineId}-panel`}>
         <VisualFrame
           title="Primary Climate Machine Cutaway"
           caption="Даже спор о технологии показывается через сезоны и общественную жизнь, а не как набор труб вне города."
@@ -545,6 +572,7 @@ export function MachineSwitcher({ machines }: { machines: MachineSpec[] }) {
 }
 
 export function NuclearSummerSimulator({ machine }: { machine: MachineSpec }) {
+  const panelPrefix = useId();
   const states = machine.summerStates ?? [];
   const [activeStateId, setActiveStateId] = useState(states[0]?.id ?? "");
   const activeState = states.find((item) => item.id === activeStateId) ?? states[0];
@@ -561,6 +589,7 @@ export function NuclearSummerSimulator({ machine }: { machine: MachineSpec }) {
           value={activeStateId}
           onChange={setActiveStateId}
           label="Летние режимы атомного сценария"
+          panelPrefix={panelPrefix}
         />
         <article className="explorer-card">
           <div className="card-header-row">
@@ -584,19 +613,24 @@ export function NuclearSummerSimulator({ machine }: { machine: MachineSpec }) {
           </p>
         </article>
       </div>
-      <VisualFrame
-        title="Nuclear Summer Simulator"
-        caption="От тёплого дня до жаркой недели: атомный сценарий объясняется как режимируемый климатический контур, а не как грубая схема постоянного сброса тепла."
-      >
-        <NuclearSummerGraphic state={activeState as MachineSummerState} />
-      </VisualFrame>
+      <div role="tabpanel" id={`${panelPrefix}-${activeStateId}-panel`}>
+        <VisualFrame
+          title="Nuclear Summer Simulator"
+          caption="От тёплого дня до жаркой недели: атомный сценарий объясняется как режимируемый климатический контур, а не как грубая схема постоянного сброса тепла."
+        >
+          <NuclearSummerGraphic state={activeState as MachineSummerState} />
+        </VisualFrame>
+      </div>
     </div>
   );
 }
 
 export function VersionMatrix({ variants }: { variants: VariantSpec[] }) {
+  const panelPrefix = useId();
   const [activeVariantId, setActiveVariantId] = useState(variants[0]?.id ?? "");
   const variant = variants.find((item) => item.id === activeVariantId) ?? variants[0];
+
+  if (!variants.length) return null;
 
   return (
     <div className="machine-layout">
@@ -606,6 +640,7 @@ export function VersionMatrix({ variants }: { variants: VariantSpec[] }) {
           value={activeVariantId}
           onChange={setActiveVariantId}
           label="Версии развития"
+          panelPrefix={panelPrefix}
         />
         <article className="explorer-card">
           <div className="card-header-row">
@@ -637,7 +672,7 @@ export function VersionMatrix({ variants }: { variants: VariantSpec[] }) {
           <SourceDisclosure sourceIds={variant.sourceIds} label="Опоры версии" />
         </article>
       </div>
-      <div className="visual-stack">
+      <div className="visual-stack" role="tabpanel" id={`${panelPrefix}-${activeVariantId}-panel`}>
         <VisualFrame
           title="Version Matrix"
           caption="Четыре версии показывают не новые картинки ради картинки, а разные уровни бюджета, масштаба и климатического насыщения."
@@ -658,6 +693,8 @@ export function VersionMatrix({ variants }: { variants: VariantSpec[] }) {
 export function RulebookOverlay({ rules }: { rules: ClimateRule[] }) {
   const [activeRuleId, setActiveRuleId] = useState(rules[0]?.id ?? "");
   const rule = rules.find((item) => item.id === activeRuleId) ?? rules[0];
+
+  if (!rules.length) return null;
 
   return (
     <div className="machine-layout">
@@ -705,8 +742,11 @@ export function RulebookOverlay({ rules }: { rules: ClimateRule[] }) {
 }
 
 export function ResilienceSimulator({ scenarios }: { scenarios: RiskScenario[] }) {
+  const panelPrefix = useId();
   const [activeRiskId, setActiveRiskId] = useState(scenarios[0]?.id ?? "");
   const scenario = scenarios.find((item) => item.id === activeRiskId) ?? scenarios[0];
+
+  if (!scenarios.length) return null;
 
   return (
     <div className="machine-layout">
@@ -716,6 +756,7 @@ export function ResilienceSimulator({ scenarios }: { scenarios: RiskScenario[] }
           value={activeRiskId}
           onChange={setActiveRiskId}
           label="Сценарии отказа"
+          panelPrefix={panelPrefix}
         />
         <article className="explorer-card">
           <h3>{scenario.title}</h3>
@@ -736,12 +777,14 @@ export function ResilienceSimulator({ scenarios }: { scenarios: RiskScenario[] }
           </dl>
         </article>
       </div>
-      <VisualFrame
-        title="Day Without Core"
-        caption="Устойчивость показывает не бессмертие системы, а понятную частичную деградацию без потери человеческого достоинства."
-      >
-        <ResilienceGraphic scenario={scenario} />
-      </VisualFrame>
+      <div role="tabpanel" id={`${panelPrefix}-${activeRiskId}-panel`}>
+        <VisualFrame
+          title="Day Without Core"
+          caption="Устойчивость показывает не бессмертие системы, а понятную частичную деградацию без потери человеческого достоинства."
+        >
+          <ResilienceGraphic scenario={scenario} />
+        </VisualFrame>
+      </div>
     </div>
   );
 }
@@ -753,6 +796,7 @@ export function CostPanel({
   costScenario: CostScenario;
   phases: PhaseSpec[];
 }) {
+  const panelPrefix = useId();
   const [band, setBand] = useState<"low" | "base" | "high">("base");
 
   return (
@@ -767,6 +811,7 @@ export function CostPanel({
           value={band}
           onChange={setBand}
           label="CAPEX сценарии"
+          panelPrefix={panelPrefix}
         />
         <article className="explorer-card">
           <h3>{costScenario.scenario}</h3>
@@ -791,7 +836,7 @@ export function CostPanel({
           </dl>
         </article>
       </div>
-      <div className="visual-stack">
+      <div className="visual-stack" role="tabpanel" id={`${panelPrefix}-${band}-panel`}>
         <VisualFrame
           title="CAPEX and Phasing"
           caption="Даже дорогая утопия остаётся проверяемой, когда цифры и очереди поданы как decision-ready narrative."

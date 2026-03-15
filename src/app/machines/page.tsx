@@ -70,7 +70,7 @@ export default function MachinesPage() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <FooterPortal />
+        <FooterPortal currentPath="/machines/" />
       </ScrollReveal>
     </main>
   );

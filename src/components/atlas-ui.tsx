@@ -230,7 +230,13 @@ export function TrustLegend({
   );
 }
 
-export function FooterPortal() {
+export function FooterPortal({ currentPath }: { currentPath?: string } = {}) {
+  const links = [
+    { href: "/versions/", label: "Открыть лабораторию версий", style: "button-primary" },
+    { href: "/machines/", label: "Сравнить климатические машины", style: "button-secondary" },
+    { href: "/appendix/", label: "Проверить appendix и provenance", style: "button-secondary" },
+  ];
+
   return (
     <footer className="atlas-footer">
       <div>
@@ -238,15 +244,13 @@ export function FooterPortal() {
         <h2>Project Totoro — это не одна картинка, а семейство проверяемых сценариев.</h2>
       </div>
       <div className="footer-links">
-        <Link href="/versions/" className="button-primary">
-          Открыть лабораторию версий
-        </Link>
-        <Link href="/machines/" className="button-secondary">
-          Сравнить климатические машины
-        </Link>
-        <Link href="/appendix/" className="button-secondary">
-          Проверить appendix и provenance
-        </Link>
+        {links
+          .filter((link) => link.href !== currentPath)
+          .map((link) => (
+            <Link key={link.href} href={link.href} className={link.style}>
+              {link.label}
+            </Link>
+          ))}
       </div>
     </footer>
   );

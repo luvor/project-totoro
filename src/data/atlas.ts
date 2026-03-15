@@ -305,7 +305,13 @@ export const metricsByTheme = metrics.reduce<Record<string, MetricRecord[]>>((ac
 export const sourcesById = Object.fromEntries(sources.map((source) => [source.id, source])) as Record<string, SourceLink>;
 
 export function getSourceLinks(sourceIds: string[]) {
-  return sourceIds.map((sourceId) => sourcesById[sourceId]).filter(Boolean);
+  return sourceIds.map((sourceId) => {
+    const source = sourcesById[sourceId];
+    if (!source && process.env.NODE_ENV === "development") {
+      console.warn(`[atlas] Source ID "${sourceId}" not found`);
+    }
+    return source;
+  }).filter(Boolean);
 }
 
 export function getQuarterById(quarterId: string) {

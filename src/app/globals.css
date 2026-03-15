@@ -73,6 +73,7 @@ body {
     radial-gradient(circle at 12% 14%, rgba(134, 182, 200, 0.16), transparent 18%),
     radial-gradient(circle at 88% 10%, rgba(240, 194, 127, 0.14), transparent 16%),
     linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
+  background-attachment: fixed;
 }
 
 a {
@@ -559,7 +560,7 @@ h3 {
   flex-wrap: nowrap;
   gap: 6px;
   width: fit-content;
-  max-width: 100%;
+  max-width: 100vw;
   margin: 0 auto 24px;
   padding: 10px;
   border: 1px solid var(--line);
@@ -570,6 +571,7 @@ h3 {
   scrollbar-width: none;
   mask-image: linear-gradient(to right, black 90%, transparent 100%);
   -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  box-sizing: border-box;
 }
 
 .section-links::-webkit-scrollbar {
@@ -1174,16 +1176,17 @@ tr:last-child td {
   content: "";
   position: absolute;
   top: 0;
-  left: -100%;
+  left: 0;
   width: 50%;
   height: 100%;
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent);
+  transform: translateX(-200%);
   animation: eyebrow-shimmer 6s ease-in-out infinite;
 }
 
 @keyframes eyebrow-shimmer {
-  0%, 100% { left: -100%; }
-  50% { left: 200%; }
+  0%, 100% { transform: translateX(-200%); }
+  50% { transform: translateX(400%); }
 }
 
 .button-primary {
@@ -1253,7 +1256,7 @@ tr:last-child td {
   .site-topline {
     flex-direction: column;
     align-items: stretch;
-    border-radius: 28px;
+    border-radius: 20px;
   }
 
   .page-links {
@@ -1331,6 +1334,13 @@ tr:last-child td {
   .hero-particles,
   .masthead-particles {
     display: none;
+  }
+}
+
+@media (scripting: none) {
+  .scroll-reveal {
+    opacity: 1 !important;
+    transform: none !important;
   }
 }
 
@@ -1430,7 +1440,11 @@ tr:last-child td {
     display: none !important;
   }
 
-  .atlas-section::after {
+  .atlas-section::after,
+  .atlas-section::before,
+  .home-hero-shell::before,
+  .page-masthead::before,
+  .atlas-footer::before {
     display: none !important;
   }
 

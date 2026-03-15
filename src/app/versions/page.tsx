@@ -119,7 +119,7 @@ export default function VersionsPage() {
       </ScrollReveal>
 
       <ScrollReveal>
-        <FooterPortal />
+        <FooterPortal currentPath="/versions/" />
       </ScrollReveal>
     </main>
   );

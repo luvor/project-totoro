@@ -1,0 +1,67 @@
+{
+  "name": "Project Totoro — Климатический Атлас",
+  "short_name": "Totoro Atlas",
+  "description": "Многостраничный атлас климатического города: flagship-район, версии развития, три сценария климатической машины и appendix с provenance.",
+  "start_url": "./",
+  "scope": "./",
+  "id": "/",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone"],
+  "orientation": "any",
+  "prefer_related_applications": false,
+  "theme_color": "#08111a",
+  "background_color": "#08111a",
+  "categories": ["education", "design"],
+  "lang": "ru",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "icons/icon-maskable-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "Flagship район",
+      "url": "./",
+      "description": "Главная страница атласа"
+    },
+    {
+      "name": "Версии развития",
+      "url": "./versions/",
+      "description": "Три версии развития района"
+    },
+    {
+      "name": "Климатические машины",
+      "url": "./machines/",
+      "description": "Сценарии климатических машин"
+    }
+  ]
+}

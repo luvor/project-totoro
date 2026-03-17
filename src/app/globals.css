@@ -24,10 +24,16 @@
   --radius-sm: 14px;
   --shadow: 0 34px 80px rgba(4, 9, 15, 0.28);
   --max: 1320px;
+  /* Safe area insets for devices with notches/cutouts */
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
 }
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .skip-link {
@@ -69,11 +75,23 @@ body {
   margin: 0;
   font-family: var(--font-body), sans-serif;
   color: var(--text);
+  /* Solid fallback + gradient via fixed pseudo-element (iOS ignores background-attachment: fixed) */
+  background: var(--bg-top);
+  min-height: 100dvh;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -3;
   background:
     radial-gradient(circle at 12% 14%, rgba(134, 182, 200, 0.16), transparent 18%),
     radial-gradient(circle at 88% 10%, rgba(240, 194, 127, 0.14), transparent 16%),
     linear-gradient(180deg, var(--bg-top) 0%, var(--bg-mid) 45%, var(--bg-bottom) 100%);
-  background-attachment: fixed;
+  pointer-events: none;
 }
 
 a {
@@ -105,6 +123,11 @@ p,
 li,
 dd {
   line-height: 1.65;
+  overflow-wrap: break-word;
+}
+
+td {
+  overflow-wrap: break-word;
 }
 
 ul {
@@ -114,9 +137,9 @@ ul {
 
 .atlas-page {
   position: relative;
-  width: min(calc(100% - 32px), var(--max));
+  width: min(calc(100% - 32px - var(--safe-left) - var(--safe-right)), var(--max));
   margin: 0 auto;
-  padding: 28px 0 120px;
+  padding: calc(28px + var(--safe-top)) 0 calc(120px + var(--safe-bottom));
 }
 
 .page-backdrop {
@@ -154,6 +177,9 @@ ul {
 }
 
 .brand-mark {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
   font-family: var(--font-display), sans-serif;
   font-size: 0.96rem;
   letter-spacing: -0.02em;
@@ -170,7 +196,7 @@ ul {
 .section-links a,
 .segmented-tabs button,
 .quarter-pill {
-  min-height: 42px;
+  min-height: 44px;
   padding: 10px 14px;
   border-radius: 999px;
   border: 1px solid transparent;
@@ -465,6 +491,41 @@ h3 {
   transform: translateY(-1px);
 }
 
+.button-primary:active,
+.button-secondary:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+
+.page-links a:active,
+.section-links a:active,
+.segmented-tabs button:active,
+.quarter-pill:active {
+  transform: scale(0.96);
+  background: rgba(255, 255, 255, 0.12);
+  transition-duration: 60ms;
+}
+
+/* Scroll-snap for horizontal tab strips on touch */
+.segmented-tabs {
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
+}
+
+.segmented-tabs button {
+  scroll-snap-align: center;
+}
+
+.source-disclosure summary:active {
+  opacity: 0.7;
+  transition-duration: 60ms;
+}
+
+.source-disclosure-body a:active {
+  background: rgba(255, 255, 255, 0.1);
+  transition-duration: 60ms;
+}
+
 .metric-strip {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -568,9 +629,12 @@ h3 {
   background: rgba(8, 17, 26, 0.82);
   backdrop-filter: blur(18px);
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
   scrollbar-width: none;
-  mask-image: linear-gradient(to right, black 90%, transparent 100%);
-  -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+  mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent 0%, black 4%, black 96%, transparent 100%);
   box-sizing: border-box;
 }
 
@@ -582,6 +646,7 @@ h3 {
   white-space: nowrap;
   font-size: 0.88rem;
   padding: 8px 12px;
+  scroll-snap-align: center;
 }
 
 .story-band {
@@ -747,6 +812,9 @@ h3 {
 
 .source-disclosure summary {
   padding: 14px 16px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   list-style: none;
   font-weight: 600;
@@ -766,6 +834,7 @@ h3 {
   display: grid;
   gap: 4px;
   padding: 12px 14px;
+  min-height: 44px;
   border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.05);
 }
@@ -841,6 +910,8 @@ h3 {
 .table-shell {
   position: relative;
   overflow-x: auto;
+  overscroll-behavior-x: contain;
+  touch-action: pan-x pan-y;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
 }
@@ -1241,32 +1312,44 @@ tr:last-child td {
 
 @media (max-width: 780px) {
   .atlas-page {
-    width: min(calc(100% - 20px), var(--max));
-    padding-top: 18px;
+    width: min(calc(100% - 16px - var(--safe-left) - var(--safe-right)), var(--max));
+    padding-top: calc(14px + var(--safe-top));
+    padding-bottom: calc(80px + var(--safe-bottom));
   }
 
   .home-hero-shell,
   .page-masthead,
   .atlas-section,
   .atlas-footer {
-    padding: 20px;
-    border-radius: 26px;
+    padding: 18px;
+    border-radius: 22px;
+    margin-bottom: 16px;
   }
 
   .site-topline {
     flex-direction: column;
     align-items: stretch;
-    border-radius: 20px;
+    border-radius: 18px;
+    padding: 12px 14px;
+    gap: 12px;
   }
 
   .page-links {
     justify-content: flex-start;
+    gap: 6px;
+  }
+
+  .page-links a,
+  .section-links a,
+  .segmented-tabs button,
+  .quarter-pill {
+    min-height: 44px;
   }
 
   h1,
   .page-title-block h1 {
     max-width: 100%;
-    font-size: clamp(2.5rem, 12vw, 4.2rem);
+    font-size: clamp(2.2rem, 10vw, 3.6rem);
     overflow-wrap: break-word;
     word-break: break-word;
     hyphens: auto;
@@ -1274,19 +1357,30 @@ tr:last-child td {
 
   h2 {
     max-width: 100%;
-    font-size: clamp(1.7rem, 8vw, 2.6rem);
+    font-size: clamp(1.6rem, 7vw, 2.4rem);
+  }
+
+  h3 {
+    font-size: 1.1rem;
   }
 
   .section-links {
-    position: static;
-    width: 100%;
+    position: sticky;
+    top: var(--safe-top, 0px);
+    width: calc(100% + 16px);
+    margin-left: -8px;
     overflow-x: auto;
     flex-wrap: nowrap;
-    padding-bottom: 10px;
+    padding: 8px 12px;
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    touch-action: pan-x;
   }
 
   .metric-strip {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
   }
 
   .card-grid.two,
@@ -1301,19 +1395,24 @@ tr:last-child td {
   .machine-layout,
   .two-column-band {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .trust-legend {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
   }
 
   .story-band {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+    margin-bottom: 16px;
   }
 
   .page-links a,
   .section-links a {
     white-space: nowrap;
+    font-size: 0.84rem;
   }
 
   .hero-topline,
@@ -1328,12 +1427,130 @@ tr:last-child td {
   }
 
   .atlas-section .section-intro::before {
-    font-size: 6rem;
+    font-size: 5rem;
   }
 
   .hero-particles,
   .masthead-particles {
     display: none;
+  }
+
+  .gradient-mesh {
+    animation: none;
+  }
+
+  .hero-lead {
+    font-size: 1.02rem;
+    line-height: 1.7;
+  }
+
+  .section-intro p,
+  .page-title-block p {
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  /* More vertical breathing room between sections on mobile */
+  .section-intro {
+    margin-bottom: 18px;
+    gap: 10px;
+  }
+
+  .eyebrow {
+    margin-bottom: 4px;
+  }
+
+  .hero-mode-panel,
+  .explorer-card,
+  .feature-panel,
+  .reason-card,
+  .claim-card,
+  .comparison-card,
+  .metric-card,
+  .story-card,
+  .phase-card,
+  .trust-legend-card {
+    padding: 16px;
+    border-radius: 18px;
+  }
+
+  .visual-frame {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  .button-primary,
+  .button-secondary {
+    min-height: 48px;
+    padding: 0 20px;
+    font-size: 0.95rem;
+  }
+
+  .home-hero-grid {
+    margin-top: 16px;
+  }
+
+  .hero-copy {
+    gap: 16px;
+  }
+
+  th,
+  td {
+    padding: 10px 12px;
+    font-size: 0.88rem;
+  }
+
+  .atlas-footer {
+    padding-bottom: calc(18px + var(--safe-bottom));
+  }
+}
+
+/* Extra-small screens (iPhone SE, narrow Android) */
+@media (max-width: 420px) {
+  .atlas-page {
+    width: calc(100% - 8px - var(--safe-left) - var(--safe-right));
+  }
+
+  .home-hero-shell,
+  .page-masthead,
+  .atlas-section,
+  .atlas-footer {
+    padding: 14px;
+    border-radius: 18px;
+  }
+
+  h1,
+  .page-title-block h1 {
+    font-size: clamp(1.8rem, 9vw, 2.8rem);
+  }
+
+  h2 {
+    font-size: clamp(1.4rem, 7vw, 2rem);
+  }
+
+  .story-band {
+    grid-template-columns: 1fr;
+  }
+
+  .trust-legend {
+    grid-template-columns: 1fr;
+  }
+
+  .metric-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .segmented-tabs {
+    gap: 6px;
+  }
+
+  .segmented-tabs button {
+    padding: 8px 12px;
+    font-size: 0.84rem;
+  }
+
+  .page-masthead {
+    padding-bottom: 24px;
   }
 }
 
@@ -1345,6 +1562,10 @@ tr:last-child td {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .gradient-mesh,
   .hero-particles,
   .hero-particles::before,
@@ -1368,6 +1589,127 @@ tr:last-child td {
   .visual-frame,
   .button-primary::after {
     transition: none !important;
+  }
+}
+
+/* PWA install banner */
+.pwa-install-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px calc(14px + var(--safe-bottom)) 20px;
+  background: rgba(8, 17, 26, 0.92);
+  backdrop-filter: blur(24px);
+  border-top: 1px solid var(--line);
+  animation: slide-up-banner 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.pwa-install-banner p {
+  margin: 0;
+  font-size: 0.92rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pwa-install-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.pwa-install-banner .button-primary {
+  min-height: 38px;
+  padding: 0 16px;
+  font-size: 0.85rem;
+}
+
+.pwa-dismiss {
+  min-height: 38px;
+  padding: 0 12px;
+  color: var(--muted);
+  font-size: 0.84rem;
+}
+
+.pwa-dismiss:active {
+  opacity: 0.6;
+}
+
+@keyframes slide-up-banner {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* PWA standalone mode adjustments */
+@media (display-mode: standalone) {
+  html {
+    overscroll-behavior-y: none;
+  }
+
+  .atlas-page {
+    padding-top: calc(var(--safe-top) + 14px);
+  }
+
+  .section-links {
+    top: var(--safe-top, 0px);
+  }
+
+  .atlas-footer {
+    padding-bottom: calc(22px + var(--safe-bottom));
+  }
+
+  .skip-link:focus {
+    top: calc(16px + var(--safe-top));
+  }
+}
+
+/* Landscape orientation on mobile */
+@media (max-height: 500px) and (orientation: landscape) {
+  .atlas-page {
+    padding-top: calc(10px + var(--safe-top));
+    padding-bottom: calc(60px + var(--safe-bottom));
+  }
+
+  .home-hero-shell,
+  .page-masthead,
+  .atlas-section,
+  .atlas-footer {
+    padding: 16px calc(16px + var(--safe-right)) 16px calc(16px + var(--safe-left));
+  }
+
+  h1,
+  .page-title-block h1 {
+    font-size: clamp(1.6rem, 5vw, 2.4rem);
+  }
+
+  .section-links {
+    top: var(--safe-top, 0px);
+    padding: 6px calc(6px + var(--safe-right)) 6px calc(6px + var(--safe-left));
+  }
+
+  .section-links a {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+  }
+
+  .metric-strip {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  h2 {
+    font-size: clamp(1.4rem, 4vw, 2rem);
   }
 }
 

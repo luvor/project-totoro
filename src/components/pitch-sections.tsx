@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
+import Image from "next/image";
 import styles from "./pitch.module.css";
+import { FrostpunkCityscape } from "./visuals/frostpunk-cityscape";
+import { FrostpunkStreet } from "./visuals/frostpunk-street";
+import { FrostpunkThermalCore } from "./visuals/frostpunk-thermal-core";
+import { FrostpunkSeasons } from "./visuals/frostpunk-seasons";
 
 /* ─── Scroll-triggered reveal ─── */
 function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
@@ -272,6 +277,25 @@ export function PitchHowItWorks() {
         <span className={styles.sectionKicker}>Как это работает</span>
         <h2 className={styles.sectionTitle}>Четыре принципа</h2>
       </Reveal>
+
+      {/* Frostpunk bird's eye panorama */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <FrostpunkCityscape />
+        </div>
+        <p className={styles.frostpunkCaption}>
+          Вид сверху: кольцевая структура района с тепловым ядром в центре,
+          отапливаемыми галереями и трамвайным кольцом
+        </p>
+      </Reveal>
+
+      {/* AI render — aerial */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <Image src="/images/renders/frostpunk-aerial.webp" alt="Кольцевой арктический район с высоты — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+        </div>
+      </Reveal>
+
       <div className={styles.conceptsGrid}>
         {concepts.map((c, i) => (
           <Reveal key={i} delay={i * 140} className={styles.conceptCard}>
@@ -281,6 +305,24 @@ export function PitchHowItWorks() {
           </Reveal>
         ))}
       </div>
+
+      {/* Frostpunk thermal core */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <FrostpunkThermalCore />
+        </div>
+        <p className={styles.frostpunkCaption}>
+          Тепловое ядро района: центральный теплообменник, сеть изолированных труб,
+          системы контроля и обслуживающий персонал
+        </p>
+      </Reveal>
+
+      {/* AI render — thermal core */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <Image src="/images/renders/frostpunk-thermal.webp" alt="Теплообменная инфраструктура района — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+        </div>
+      </Reveal>
     </section>
   );
 }
@@ -293,34 +335,27 @@ export function PitchLife() {
         <span className={styles.sectionKicker}>Результат</span>
         <h2 className={styles.sectionTitle}>Жизнь в Тепловом Кольце</h2>
       </Reveal>
+
+      {/* Frostpunk street-level winter scene */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <FrostpunkStreet />
+        </div>
+        <p className={styles.frostpunkCaption}>
+          Вид с улицы: отапливаемая стеклянная галерея защищает пешеходов от метели.
+          Внутри тепло и светло, снаружи &mdash; зима
+        </p>
+      </Reveal>
+
+      {/* AI render — gallery */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <Image src="/images/renders/frostpunk-gallery.webp" alt="Отапливаемая стеклянная галерея изнутри — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+        </div>
+      </Reveal>
+
       <div className={styles.lifeGrid}>
         <Reveal delay={0} className={styles.lifeCard}>
-          <div className={styles.lifeVisual}>
-            <svg viewBox="0 0 200 120" fill="none" aria-hidden="true">
-              {/* Winter scene */}
-              <rect x="0" y="0" width="200" height="120" rx="12" fill="var(--surface)" />
-              <path d="M0 90 Q50 70 100 85 Q150 100 200 80 L200 120 L0 120Z" fill="var(--steel)" opacity="0.1" />
-              {/* Buildings */}
-              <rect x="20" y="40" width="30" height="50" rx="3" fill="var(--steel)" opacity="0.2" />
-              <rect x="60" y="30" width="25" height="60" rx="3" fill="var(--steel)" opacity="0.15" />
-              <rect x="95" y="45" width="35" height="45" rx="3" fill="var(--steel)" opacity="0.2" />
-              <rect x="140" y="35" width="28" height="55" rx="3" fill="var(--steel)" opacity="0.15" />
-              {/* Gallery connection */}
-              <path d="M50 65 L60 65" stroke="var(--amber)" strokeWidth="2" opacity="0.6" />
-              <path d="M85 65 L95 65" stroke="var(--amber)" strokeWidth="2" opacity="0.6" />
-              <path d="M130 65 L140 65" stroke="var(--amber)" strokeWidth="2" opacity="0.6" />
-              {/* Warm windows */}
-              <rect x="28" y="48" width="6" height="6" rx="1" fill="var(--amber)" opacity="0.5" />
-              <rect x="38" y="48" width="6" height="6" rx="1" fill="var(--amber)" opacity="0.4" />
-              <rect x="28" y="60" width="6" height="6" rx="1" fill="var(--amber)" opacity="0.3" />
-              <rect x="38" y="60" width="6" height="6" rx="1" fill="var(--amber)" opacity="0.5" />
-              {/* Snowflakes */}
-              <circle cx="75" cy="18" r="2" fill="white" opacity="0.3" />
-              <circle cx="120" cy="12" r="1.5" fill="white" opacity="0.25" />
-              <circle cx="160" cy="20" r="2" fill="white" opacity="0.2" />
-              <circle cx="45" cy="15" r="1.5" fill="white" opacity="0.3" />
-            </svg>
-          </div>
           <h3 className={styles.lifeCardTitle}>Зимний комфорт</h3>
           <p className={styles.lifeCardText}>
             Защищённые галереи связывают кварталы. Тёплые civic-интерьеры открыты для всех.
@@ -329,31 +364,6 @@ export function PitchLife() {
         </Reveal>
 
         <Reveal delay={160} className={styles.lifeCard}>
-          <div className={styles.lifeVisual}>
-            <svg viewBox="0 0 200 120" fill="none" aria-hidden="true">
-              {/* Summer scene */}
-              <rect x="0" y="0" width="200" height="120" rx="12" fill="var(--surface)" />
-              {/* Buildings */}
-              <rect x="30" y="40" width="30" height="50" rx="3" fill="var(--moss)" opacity="0.15" />
-              <rect x="110" y="35" width="35" height="55" rx="3" fill="var(--moss)" opacity="0.15" />
-              {/* Trees canopy */}
-              <ellipse cx="80" cy="38" rx="22" ry="16" fill="var(--moss)" opacity="0.25" />
-              <ellipse cx="68" cy="42" rx="15" ry="12" fill="var(--moss)" opacity="0.2" />
-              <ellipse cx="92" cy="40" rx="16" ry="14" fill="var(--moss)" opacity="0.2" />
-              <line x1="80" y1="54" x2="80" y2="90" stroke="var(--moss)" strokeWidth="2" opacity="0.3" />
-              {/* Shadow on ground */}
-              <ellipse cx="80" cy="92" rx="28" ry="6" fill="var(--moss)" opacity="0.1" />
-              {/* People path */}
-              <circle cx="55" cy="85" r="3" fill="var(--amber)" opacity="0.5" />
-              <circle cx="100" cy="82" r="3" fill="var(--amber)" opacity="0.4" />
-              <circle cx="140" cy="86" r="3" fill="var(--amber)" opacity="0.5" />
-              {/* Shade lines */}
-              <path d="M60 90 L100 90" stroke="var(--moss)" strokeWidth="1" strokeDasharray="4 3" opacity="0.3" />
-              {/* Sun */}
-              <circle cx="170" cy="20" r="10" fill="var(--amber)" opacity="0.2" />
-              <circle cx="170" cy="20" r="5" fill="var(--amber)" opacity="0.4" />
-            </svg>
-          </div>
           <h3 className={styles.lifeCardTitle}>Летняя прохлада</h3>
           <p className={styles.lifeCardText}>
             Теневые маршруты, прохладные сады и breeze-коридоры.
@@ -362,37 +372,6 @@ export function PitchLife() {
         </Reveal>
 
         <Reveal delay={320} className={styles.lifeCard}>
-          <div className={styles.lifeVisual}>
-            <svg viewBox="0 0 200 120" fill="none" aria-hidden="true">
-              {/* Accessibility scene */}
-              <rect x="0" y="0" width="200" height="120" rx="12" fill="var(--surface)" />
-              {/* Flat path */}
-              <path d="M10 80 L190 80" stroke="var(--steel)" strokeWidth="2" opacity="0.3" />
-              {/* Tram */}
-              <rect x="70" y="64" width="60" height="16" rx="8" fill="var(--steel)" opacity="0.2" stroke="var(--steel)" strokeWidth="1" />
-              <circle cx="82" cy="80" r="4" fill="var(--steel)" opacity="0.3" />
-              <circle cx="118" cy="80" r="4" fill="var(--steel)" opacity="0.3" />
-              <rect x="78" y="68" width="8" height="8" rx="1" fill="var(--amber)" opacity="0.3" />
-              <rect x="90" y="68" width="8" height="8" rx="1" fill="var(--amber)" opacity="0.25" />
-              <rect x="102" y="68" width="8" height="8" rx="1" fill="var(--amber)" opacity="0.3" />
-              <rect x="114" y="68" width="8" height="8" rx="1" fill="var(--amber)" opacity="0.25" />
-              {/* Distance markers */}
-              <text x="20" y="100" fill="var(--muted)" fontSize="8" opacity="0.5">0</text>
-              <text x="90" y="100" fill="var(--muted)" fontSize="8" opacity="0.5">450м</text>
-              <text x="165" y="100" fill="var(--muted)" fontSize="8" opacity="0.5">900м</text>
-              {/* Service icons */}
-              <circle cx="30" cy="45" r="12" fill="var(--moss)" opacity="0.15" stroke="var(--moss)" strokeWidth="1" />
-              <text x="24" y="49" fill="var(--moss)" fontSize="10" opacity="0.6">+</text>
-              <circle cx="100" cy="40" r="14" fill="var(--amber)" opacity="0.12" stroke="var(--amber)" strokeWidth="1" />
-              <rect x="93" y="35" width="14" height="10" rx="2" fill="none" stroke="var(--amber)" strokeWidth="1" opacity="0.5" />
-              <circle cx="170" cy="45" r="12" fill="var(--steel)" opacity="0.15" stroke="var(--steel)" strokeWidth="1" />
-              <path d="M165 45 L175 45 M170 40 L170 50" stroke="var(--steel)" strokeWidth="1" opacity="0.5" />
-              {/* Connecting lines */}
-              <path d="M30 57 L30 80" stroke="var(--moss)" strokeWidth="1" strokeDasharray="2 3" opacity="0.3" />
-              <path d="M100 54 L100 64" stroke="var(--amber)" strokeWidth="1" strokeDasharray="2 3" opacity="0.3" />
-              <path d="M170 57 L170 80" stroke="var(--steel)" strokeWidth="1" strokeDasharray="2 3" opacity="0.3" />
-            </svg>
-          </div>
           <h3 className={styles.lifeCardTitle}>Всё рядом</h3>
           <p className={styles.lifeCardText}>
             100% маршрутов без ступеней. Трамвайное кольцо 9,6 км.
@@ -400,6 +379,24 @@ export function PitchLife() {
           </p>
         </Reveal>
       </div>
+
+      {/* Frostpunk seasons comparison */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <FrostpunkSeasons />
+        </div>
+        <p className={styles.frostpunkCaption}>
+          Одно и то же место зимой и летом: город переключает инфраструктуру
+          под каждый сезон
+        </p>
+      </Reveal>
+
+      {/* AI render — summer */}
+      <Reveal>
+        <div className={styles.frostpunkVisual}>
+          <Image src="/images/renders/frostpunk-summer.webp" alt="Район летом: парки, тень, открытые кафе — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+        </div>
+      </Reveal>
     </section>
   );
 }

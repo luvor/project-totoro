@@ -359,6 +359,33 @@
 }
 
 /* ═══════════════════════════════════════════
+   FROSTPUNK VISUALS
+   ═══════════════════════════════════════════ */
+.frostpunkVisual {
+  margin: 32px 0 8px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: #060a14;
+}
+
+.frostpunkVisual svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.frostpunkCaption {
+  margin: 0 0 40px;
+  padding: 0 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
    LIFE VISUALIZATION
    ═══════════════════════════════════════════ */
 .lifeGrid {

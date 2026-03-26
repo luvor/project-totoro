@@ -1,14 +1,12 @@
 :root {
   --bg-top: #08111a;
   --bg-mid: #0f1d2c;
-  --bg-bottom: #efe9df;
+  --bg-bottom: #0a1520;
   --surface: rgba(11, 21, 33, 0.78);
   --surface-strong: #122132;
   --surface-soft: rgba(255, 255, 255, 0.06);
-  --surface-light: rgba(250, 246, 238, 0.82);
   --card: rgba(255, 255, 255, 0.07);
   --line: rgba(255, 255, 255, 0.12);
-  --line-dark: rgba(16, 32, 48, 0.12);
   --text: #f7f3eb;
   --muted: #b3c1cd;
   --ink: #102030;
@@ -1367,8 +1365,8 @@ tr:last-child td {
   .section-links {
     position: sticky;
     top: var(--safe-top, 0px);
-    width: calc(100% + 16px);
-    margin-left: -8px;
+    width: auto;
+    margin: 0 -8px;
     overflow-x: auto;
     flex-wrap: nowrap;
     padding: 8px 12px;
@@ -1710,6 +1708,32 @@ tr:last-child td {
 
   h2 {
     font-size: clamp(1.4rem, 4vw, 2rem);
+  }
+}
+
+/* ===== Detailed page enhancements ===== */
+
+.svg-duo-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 28px;
+}
+
+.detailed-svg-graphic {
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.detailed-svg-graphic:hover {
+  transform: scale(1.015);
+}
+
+@media (max-width: 800px) {
+  .svg-duo-grid {
+    grid-template-columns: 1fr;
+    gap: 18px;
   }
 }
 

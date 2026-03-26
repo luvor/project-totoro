@@ -19,6 +19,7 @@ export function formatCompactNumber(value: number) {
 export function SiteTopline({ activePage }: { activePage?: string } = {}) {
   const pages = [
     { href: "/", label: "Flagship" },
+    { href: "/detailed/", label: "Detailed" },
     { href: "/versions/", label: "Versions" },
     { href: "/machines/", label: "Machines" },
     { href: "/appendix/", label: "Appendix" },

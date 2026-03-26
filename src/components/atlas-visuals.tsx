@@ -6,6 +6,8 @@ export { SummerStreetGraphic } from "./visuals/summer-street";
 export { FlourishingWheelGraphic } from "./visuals/flourishing";
 export { SeasonalCalendarGraphic } from "./visuals/calendar";
 export { ResilienceGraphic } from "./visuals/resilience";
+export { DistrictPlanGraphic, ZoneLayoutGraphic } from "./visuals/district-plan";
+export { MetricsInfographic, ClimateModesGraphic } from "./visuals/metrics-infographic";
 
 import type { VariantSpec } from "@/data/atlas";
 

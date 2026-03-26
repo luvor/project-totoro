@@ -1,0 +1,581 @@
+/* ═══════════════════════════════════════════
+   PITCH LANDING PAGE — Тепловое Кольцо
+   Dark, moody, cinematic pitch deck feel
+   ═══════════════════════════════════════════ */
+
+/* ─── Scroll-triggered reveal ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(32px);
+  transition:
+    opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.revealVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ═══════════════════════════════════════════
+   HERO
+   ═══════════════════════════════════════════ */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100dvh;
+  padding: 60px 24px;
+  overflow: hidden;
+}
+
+.heroRing {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.ringSvg {
+  width: min(90vw, 700px);
+  height: min(90vw, 700px);
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity 1.8s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.ringVisible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.heroContent {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s,
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1) 0.5s;
+}
+
+.heroContentVisible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.heroKicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 194, 127, 0.25);
+  background: rgba(240, 194, 127, 0.08);
+  color: var(--amber);
+  font-size: 0.82rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-family: var(--font-body), sans-serif;
+}
+
+.heroTitle {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(3.2rem, 10vw, 7.5rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 0.92;
+  color: var(--text);
+  max-width: none;
+  background: linear-gradient(
+    135deg,
+    var(--snow) 0%,
+    var(--amber) 40%,
+    var(--copper) 70%,
+    var(--steel) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.heroTagline {
+  margin: 0;
+  max-width: 480px;
+  font-size: clamp(1rem, 2.2vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.heroScroll {
+  position: absolute;
+  bottom: 32px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--muted);
+  opacity: 0.4;
+  animation: heroScrollBounce 2s ease-in-out infinite;
+}
+
+@keyframes heroScrollBounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50% { transform: translateX(-50%) translateY(8px); }
+}
+
+/* ─── Ring animations ─── */
+.ringRotate {
+  animation: ringSpin 60s linear infinite;
+  transform-origin: center;
+}
+
+.ringRotateReverse {
+  animation: ringSpinReverse 45s linear infinite;
+  transform-origin: center;
+}
+
+.ringRotateSlow {
+  animation: ringSpin 90s linear infinite;
+  transform-origin: center;
+}
+
+.ringPulse {
+  animation: ringPulseAnim 4s ease-in-out infinite;
+}
+
+.nodeGlow {
+  animation: nodeGlowAnim 3s ease-in-out infinite;
+}
+
+@keyframes ringSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes ringSpinReverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes ringPulseAnim {
+  0%, 100% { opacity: 0.2; }
+  50% { opacity: 0.45; }
+}
+
+@keyframes nodeGlowAnim {
+  0%, 100% { r: 8; opacity: 0.4; }
+  50% { r: 14; opacity: 0.7; }
+}
+
+/* ═══════════════════════════════════════════
+   SECTIONS (shared)
+   ═══════════════════════════════════════════ */
+.section {
+  position: relative;
+  width: min(calc(100% - 32px), var(--max));
+  margin: 0 auto;
+  padding: 80px 0;
+}
+
+.sectionKicker {
+  display: inline-flex;
+  align-items: center;
+  padding: 7px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--amber);
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.sectionTitle {
+  margin: 0 0 40px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+  color: var(--text);
+  max-width: 16ch;
+}
+
+/* ═══════════════════════════════════════════
+   PROBLEM SECTION
+   ═══════════════════════════════════════════ */
+.problemGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.problemCard {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, rgba(239, 148, 97, 0.04), rgba(8, 17, 26, 0.6));
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.problemCard:hover {
+  border-color: rgba(239, 148, 97, 0.25);
+  transform: translateY(-2px);
+}
+
+.problemIcon {
+  width: 56px;
+  height: 56px;
+  margin-bottom: 18px;
+}
+
+.problemIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.problemCardTitle {
+  margin: 0 0 8px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.problemCardText {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   METRICS SECTION
+   ═══════════════════════════════════════════ */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.metricTile {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.metricTile:hover {
+  border-color: rgba(240, 194, 127, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.metricValue {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  color: var(--text);
+}
+
+.metricUnit {
+  margin-left: 6px;
+  font-size: 0.4em;
+  font-weight: 400;
+  color: var(--amber);
+  letter-spacing: 0;
+  vertical-align: baseline;
+}
+
+.metricLabel {
+  font-size: 0.88rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+/* ═══════════════════════════════════════════
+   HOW IT WORKS
+   ═══════════════════════════════════════════ */
+.conceptsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.conceptCard {
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(8, 17, 26, 0.5));
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.conceptCard:hover {
+  border-color: rgba(134, 182, 200, 0.2);
+  transform: translateY(-2px);
+}
+
+.conceptIcon {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 18px;
+}
+
+.conceptIcon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.conceptCardTitle {
+  margin: 0 0 8px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.2rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.conceptCardText {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   LIFE VISUALIZATION
+   ═══════════════════════════════════════════ */
+.lifeGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+.lifeCard {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  transition: border-color 0.3s ease;
+}
+
+.lifeCard:hover {
+  border-color: rgba(240, 194, 127, 0.15);
+}
+
+.lifeVisual {
+  padding: 8px;
+}
+
+.lifeVisual svg {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius-md);
+}
+
+.lifeCardTitle {
+  margin: 0;
+  padding: 0 24px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.15rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+
+.lifeCardText {
+  margin: 8px 0 0;
+  padding: 0 24px 24px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+/* ═══════════════════════════════════════════
+   CTA SECTION
+   ═══════════════════════════════════════════ */
+.ctaSection {
+  position: relative;
+  width: min(calc(100% - 32px), var(--max));
+  margin: 0 auto;
+  padding: 60px 0 120px;
+}
+
+.ctaContent {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 48px 28px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(
+    135deg,
+    rgba(240, 194, 127, 0.06) 0%,
+    rgba(8, 17, 26, 0.8) 50%,
+    rgba(134, 182, 200, 0.06) 100%
+  );
+}
+
+.ctaTitle {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.6rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  color: var(--text);
+  max-width: 16ch;
+}
+
+.ctaText {
+  margin: 0;
+  max-width: 48ch;
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 12px;
+  padding: 16px 36px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, var(--amber), var(--copper));
+  color: var(--ink);
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-decoration: none;
+  transition:
+    transform 200ms ease,
+    box-shadow 200ms ease;
+  box-shadow: 0 4px 24px rgba(240, 194, 127, 0.2);
+}
+
+.ctaArrow {
+  transition: transform 200ms ease;
+}
+
+.ctaButton:hover .ctaArrow,
+.ctaButton:focus-visible .ctaArrow {
+  transform: translateX(4px);
+}
+
+.ctaButton:hover,
+.ctaButton:focus-visible {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 40px rgba(240, 194, 127, 0.35);
+}
+
+.ctaButton:active {
+  transform: scale(0.97);
+  transition-duration: 60ms;
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — TABLET
+   ═══════════════════════════════════════════ */
+@media (min-width: 640px) {
+  .problemGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .conceptsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .lifeGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — DESKTOP
+   ═══════════════════════════════════════════ */
+@media (min-width: 1024px) {
+  .section {
+    padding: 120px 0;
+  }
+
+  .problemGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .metricsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .conceptsGrid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .ctaContent {
+    padding: 72px 48px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   REDUCED MOTION
+   ═══════════════════════════════════════════ */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    transition: opacity 0.3s ease;
+    transform: none;
+  }
+
+  .revealVisible {
+    transform: none;
+  }
+
+  .ringSvg {
+    transition: opacity 0.5s ease;
+    transform: none;
+  }
+
+  .ringVisible {
+    transform: none;
+  }
+
+  .heroContent {
+    transition: opacity 0.5s ease;
+    transform: none;
+  }
+
+  .heroContentVisible {
+    transform: none;
+  }
+
+  .ringRotate,
+  .ringRotateReverse,
+  .ringRotateSlow,
+  .ringPulse,
+  .nodeGlow,
+  .heroScroll {
+    animation: none;
+  }
+}

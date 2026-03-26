@@ -1,52 +1,74 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
-import Image from "next/image";
 import styles from "./pitch.module.css";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
-/* ─── Snow particles — natural drift with sine-wave motion ─── */
-function SnowParticles() {
-  const flakes = useMemo(() =>
-    Array.from({ length: 50 }, (_, i) => {
-      const speed = 10 + Math.random() * 18; // 10-28s fall time
+/* ─── Mixed particles — snow (white, falling) + heat (amber, rising) ─── */
+function MixedParticles() {
+  const particles = useMemo(() => {
+    const snow = Array.from({ length: 35 }, (_, i) => {
+      const speed = 10 + Math.random() * 18;
       const size = 1.5 + Math.random() * 3.5;
-      const driftAmp = 20 + Math.random() * 60; // sine-wave drift amplitude
-      const driftFreq = 0.5 + Math.random() * 1.5; // wave frequency
+      const driftAmp = 20 + Math.random() * 60;
       return {
         id: i,
+        type: "snow" as const,
         left: `${Math.random() * 100}%`,
         size,
         duration: speed,
         delay: Math.random() * 15,
         opacity: 0.1 + Math.random() * 0.4,
         driftAmp,
-        driftFreq,
-        // Assign one of 3 animation variants for variety
         variant: i % 3,
       };
-    }),
-  []);
+    });
+    const heat = Array.from({ length: 15 }, (_, i) => {
+      const speed = 8 + Math.random() * 14;
+      const size = 1 + Math.random() * 2.5;
+      const driftAmp = 15 + Math.random() * 40;
+      return {
+        id: 100 + i,
+        type: "heat" as const,
+        left: `${20 + Math.random() * 60}%`,
+        size,
+        duration: speed,
+        delay: Math.random() * 12,
+        opacity: 0.15 + Math.random() * 0.35,
+        driftAmp,
+        variant: i % 3,
+      };
+    });
+    return [...snow, ...heat];
+  }, []);
 
   return (
     <div className={styles.heroParticles} aria-hidden="true">
-      {flakes.map(f => (
+      {particles.map(p => (
         <div
-          key={f.id}
-          className={`${styles.snowflake} ${
-            f.variant === 0 ? styles.snowDriftA :
-            f.variant === 1 ? styles.snowDriftB :
-            styles.snowDriftC
-          }`}
+          key={p.id}
+          className={
+            p.type === "snow"
+              ? `${styles.snowflake} ${
+                  p.variant === 0 ? styles.snowDriftA :
+                  p.variant === 1 ? styles.snowDriftB :
+                  styles.snowDriftC
+                }`
+              : `${styles.heatParticle} ${
+                  p.variant === 0 ? styles.heatRiseA :
+                  p.variant === 1 ? styles.heatRiseB :
+                  styles.heatRiseC
+                }`
+          }
           style={{
-            left: f.left,
-            width: `${f.size}px`,
-            height: `${f.size}px`,
-            animationDuration: `${f.duration}s`,
-            animationDelay: `${f.delay}s`,
-            opacity: f.opacity,
-            "--drift-amp": `${f.driftAmp}px`,
+            left: p.left,
+            width: `${p.size}px`,
+            height: `${p.size}px`,
+            animationDuration: `${p.duration}s`,
+            animationDelay: `${p.delay}s`,
+            opacity: p.opacity,
+            "--drift-amp": `${p.driftAmp}px`,
           } as React.CSSProperties}
         />
       ))}
@@ -100,28 +122,30 @@ export function PitchHero() {
 
   return (
     <section className={styles.hero} aria-label="Hero">
-      {/* Background render with dark overlay */}
+      {/* Background video with poster fallback */}
       <div
         className={styles.heroBgWrap}
         style={{ transform: `translateY(${parallaxBg}px)` }}
         aria-hidden="true"
       >
-        <Image
-          src={`${basePath}/images/renders/hero-winter-aerial.webp`}
-          alt=""
-          fill
-          priority
-          className={styles.heroBgImage}
-          sizes="100vw"
-        />
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          poster={`${basePath}/videos/hero-loop-poster.webp`}
+          className={styles.heroBgVideo}
+        >
+          <source src={`${basePath}/videos/hero-loop.mp4`} type="video/mp4" />
+        </video>
         <div className={styles.heroBgOverlay} />
       </div>
 
       {/* Animated gradient background */}
       <div className={styles.heroGradientFlow} aria-hidden="true" />
 
-      {/* Snow particles */}
-      <SnowParticles />
+      {/* Mixed particles: snow + heat */}
+      <MixedParticles />
 
       <div
         className={styles.heroRing}
@@ -270,13 +294,13 @@ export function PitchHero() {
           круглый год — от &minus;40 до +35
         </p>
 
-        {/* Metric badges */}
+        {/* Metric badges — spring animation (overshoot + settle) */}
         <div className={styles.heroMetrics}>
           {heroMetrics.map((m, i) => (
             <div
               key={i}
-              className={styles.heroMetric}
-              style={{ animationDelay: `${1.2 + i * 0.15}s` }}
+              className={`${styles.heroMetric} ${visible ? styles.heroMetricSpring : ""}`}
+              style={{ animationDelay: `${1.2 + i * 0.18}s` }}
             >
               <span className={styles.heroMetricVal}>{m.value}</span>
               <span className={styles.heroMetricLabel}>{m.label}</span>

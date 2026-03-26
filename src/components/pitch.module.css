@@ -31,7 +31,7 @@
   overflow: hidden;
 }
 
-/* ─── Hero background image ─── */
+/* ─── Hero background video ─── */
 .heroBgWrap {
   position: absolute;
   inset: -40px;
@@ -40,7 +40,11 @@
   will-change: transform;
 }
 
-.heroBgImage {
+.heroBgVideo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   object-position: center 40%;
   filter: saturate(0.6) brightness(0.4);
@@ -161,8 +165,12 @@
   background: rgba(240, 194, 127, 0.05);
   backdrop-filter: blur(8px);
   opacity: 0;
-  transform: translateY(12px);
-  animation: heroMetricIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  transform: translateY(20px) scale(0.85);
+}
+
+/* Spring animation: overshoot + settle */
+.heroMetricSpring {
+  animation: heroMetricSpring 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
 }
 
 .heroMetricVal {
@@ -181,10 +189,21 @@
   opacity: 0.7;
 }
 
-@keyframes heroMetricIn {
-  to {
+@keyframes heroMetricSpring {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.85);
+  }
+  50% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(-6px) scale(1.04);
+  }
+  75% {
+    transform: translateY(2px) scale(0.98);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
@@ -1289,6 +1308,51 @@
 }
 
 /* ═══════════════════════════════════════════
+   HEAT PARTICLES (amber, rising)
+   ═══════════════════════════════════════════ */
+.heatParticle {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: rgba(240, 194, 127, 0.6);
+  will-change: transform, opacity;
+}
+
+.heatRiseA { animation: heatRiseA linear infinite; }
+.heatRiseB { animation: heatRiseB linear infinite; }
+.heatRiseC { animation: heatRiseC linear infinite; }
+
+@keyframes heatRiseA {
+  0% { transform: translateY(10px) translateX(0); opacity: 0; }
+  5% { opacity: 1; }
+  25% { transform: translateY(-25vh) translateX(var(--drift-amp, 20px)); }
+  50% { transform: translateY(-50vh) translateX(calc(var(--drift-amp, 20px) * -0.5)); }
+  75% { transform: translateY(-75vh) translateX(var(--drift-amp, 20px)); }
+  95% { opacity: 0.6; }
+  100% { transform: translateY(-105vh) translateX(calc(var(--drift-amp, 20px) * -0.3)); opacity: 0; }
+}
+
+@keyframes heatRiseB {
+  0% { transform: translateY(10px) translateX(0); opacity: 0; }
+  5% { opacity: 1; }
+  20% { transform: translateY(-20vh) translateX(calc(var(--drift-amp, 20px) * -0.8)); }
+  45% { transform: translateY(-45vh) translateX(var(--drift-amp, 20px)); }
+  70% { transform: translateY(-70vh) translateX(calc(var(--drift-amp, 20px) * -0.6)); }
+  95% { opacity: 0.5; }
+  100% { transform: translateY(-105vh) translateX(calc(var(--drift-amp, 20px) * 0.4)); opacity: 0; }
+}
+
+@keyframes heatRiseC {
+  0% { transform: translateY(10px) translateX(0); opacity: 0; }
+  8% { opacity: 1; }
+  30% { transform: translateY(-30vh) translateX(calc(var(--drift-amp, 20px) * 0.6)); }
+  55% { transform: translateY(-55vh) translateX(calc(var(--drift-amp, 20px) * -1)); }
+  80% { transform: translateY(-80vh) translateX(calc(var(--drift-amp, 20px) * 0.3)); }
+  92% { opacity: 0.4; }
+  100% { transform: translateY(-105vh) translateX(calc(var(--drift-amp, 20px) * -0.7)); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════
    GRADIENT FLOW BACKGROUND
    ═══════════════════════════════════════════ */
 .heroGradientFlow {
@@ -1428,6 +1492,116 @@
 }
 
 /* ═══════════════════════════════════════════
+   VISION TOGGLE
+   ═══════════════════════════════════════════ */
+.visionToggle {
+  margin: 32px 0 8px;
+}
+
+.visionTabs {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  margin-bottom: 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--line);
+}
+
+.visionTab {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-body), sans-serif;
+  font-size: 0.82rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease,
+    border-color 0.25s ease,
+    box-shadow 0.25s ease;
+  outline-offset: 2px;
+}
+
+.visionTab:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.visionTab:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+/* Vision tab active — amber accent */
+.visionTabActive {
+  color: var(--amber);
+  background: rgba(240, 194, 127, 0.1);
+  border-color: rgba(240, 194, 127, 0.25);
+  box-shadow: 0 0 16px rgba(240, 194, 127, 0.1);
+}
+
+/* Engineering tab active — steel accent */
+.visionTabEngActive {
+  color: var(--steel);
+  background: rgba(134, 182, 200, 0.1);
+  border-color: rgba(134, 182, 200, 0.25);
+  box-shadow: 0 0 16px rgba(134, 182, 200, 0.1);
+}
+
+/* Panels container */
+.visionPanels {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: #060a14;
+  aspect-ratio: 16 / 9;
+}
+
+.visionPanel {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transform: scale(0.98);
+  transition:
+    opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity, transform;
+  pointer-events: none;
+}
+
+.visionPanelActive {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+
+.visionImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.visionCaption {
+  margin: 8px 0 0;
+  padding: 0 4px;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.5;
+  opacity: 0.6;
+  text-align: center;
+}
+
+/* ═══════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -1468,7 +1642,8 @@
     animation: none;
   }
 
-  .heroMetric {
+  .heroMetric,
+  .heroMetricSpring {
     animation: none;
     opacity: 1;
     transform: none;
@@ -1493,8 +1668,16 @@
   .snowflake,
   .snowDriftA,
   .snowDriftB,
-  .snowDriftC {
+  .snowDriftC,
+  .heatParticle,
+  .heatRiseA,
+  .heatRiseB,
+  .heatRiseC {
     animation: none;
+    display: none;
+  }
+
+  .heroBgVideo {
     display: none;
   }
 
@@ -1502,4 +1685,16 @@
     animation: none;
   }
 
+  .visionPanel {
+    transition: none;
+    transform: none;
+  }
+
+  .visionPanelActive {
+    transform: none;
+  }
+
+  .visionTab {
+    transition: none;
+  }
 }

@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState, useCallback, type ReactNode, type MouseEvent } from "react";
-import Image from "next/image";
 import Link from "next/link";
 import styles from "./pitch.module.css";
+import { VisionToggle } from "./vision-toggle";
 import { FrostpunkCityscape } from "./visuals/frostpunk-cityscape";
 import { FrostpunkStreet } from "./visuals/frostpunk-street";
 import { FrostpunkThermalCore } from "./visuals/frostpunk-thermal-core";
@@ -307,11 +307,13 @@ export function PitchHowItWorks() {
         </p>
       </Reveal>
 
-      {/* AI render — aerial */}
+      {/* AI render — aerial (Vision/Engineering toggle) */}
       <Reveal>
-        <div className={styles.frostpunkVisual}>
-          <Image src={`${basePath}/images/renders/frostpunk-aerial.webp`} alt="Кольцевой арктический район с высоты — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
-        </div>
+        <VisionToggle
+          sellingImage={{ src: `${basePath}/images/renders/selling-pair-aerial.webp`, alt: "Район с высоты: тёплый жилой стиль" }}
+          engineeringImage={{ src: `${basePath}/images/renders/frostpunk-aerial.webp`, alt: "Кольцевой арктический район с высоты — инженерный рендер" }}
+          caption="Кольцевая структура района с тепловым ядром в центре"
+        />
       </Reveal>
 
       <div className={styles.conceptsGrid}>
@@ -335,11 +337,13 @@ export function PitchHowItWorks() {
         </p>
       </Reveal>
 
-      {/* AI render — thermal core */}
+      {/* AI render — thermal core (Vision/Engineering toggle) */}
       <Reveal>
-        <div className={styles.frostpunkVisual}>
-          <Image src={`${basePath}/images/renders/frostpunk-thermal.webp`} alt="Теплообменная инфраструктура района — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
-        </div>
+        <VisionToggle
+          sellingImage={{ src: `${basePath}/images/renders/selling-pair-thermal.webp`, alt: "Тепловое ядро района: уютный жилой стиль" }}
+          engineeringImage={{ src: `${basePath}/images/renders/frostpunk-thermal.webp`, alt: "Теплообменная инфраструктура района — инженерный рендер" }}
+          caption="Тепловое ядро: центральный теплообменник и сеть распределения"
+        />
       </Reveal>
     </section>
   );
@@ -365,11 +369,13 @@ export function PitchLife() {
         </p>
       </Reveal>
 
-      {/* AI render — gallery */}
+      {/* AI render — gallery (Vision/Engineering toggle) */}
       <Reveal>
-        <div className={styles.frostpunkVisual}>
-          <Image src={`${basePath}/images/renders/frostpunk-gallery.webp`} alt="Отапливаемая стеклянная галерея изнутри — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
-        </div>
+        <VisionToggle
+          sellingImage={{ src: `${basePath}/images/renders/selling-pair-gallery.webp`, alt: "Внутри галереи: тепло, свет, кофейни" }}
+          engineeringImage={{ src: `${basePath}/images/renders/frostpunk-gallery.webp`, alt: "Отапливаемая стеклянная галерея изнутри — инженерный рендер" }}
+          caption="Стеклянная галерея: тепло и свет внутри, метель снаружи"
+        />
       </Reveal>
 
       <div className={styles.lifeGrid}>
@@ -409,11 +415,13 @@ export function PitchLife() {
         </p>
       </Reveal>
 
-      {/* AI render — summer */}
+      {/* AI render — summer (Vision/Engineering toggle) */}
       <Reveal>
-        <div className={styles.frostpunkVisual}>
-          <Image src={`${basePath}/images/renders/frostpunk-summer.webp`} alt="Район летом: парки, тень, открытые кафе — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
-        </div>
+        <VisionToggle
+          sellingImage={{ src: `${basePath}/images/renders/selling-pair-summer.webp`, alt: "Район летом: зелёные дворы, кафе, велодорожки" }}
+          engineeringImage={{ src: `${basePath}/images/renders/frostpunk-summer.webp`, alt: "Район летом: парки, тень, открытые кафе — инженерный рендер" }}
+          caption="Лето: теневые маршруты, прохладные сады и открытые террасы"
+        />
       </Reveal>
     </section>
   );

@@ -8,44 +8,44 @@ const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 const slides = [
   {
-    src: `${basePath}/images/renders/frostpunk-aerial.webp`,
-    alt: "Кольцевой арктический район с высоты",
-    caption: "Вид с высоты: кольцевая структура района, тепловое ядро и трамвайная петля",
+    src: `${basePath}/images/renders/selling-aerial-summer.webp`,
+    alt: "Район с высоты: зелёные крыши, солнечные панели, уютные дворы",
+    caption: "Район с высоты: зелёные крыши, солнечные панели, уютные дворы",
   },
   {
-    src: `${basePath}/images/renders/frostpunk-gallery.webp`,
-    alt: "Отапливаемая стеклянная галерея изнутри",
-    caption: "Зимние галереи: тепло и свет внутри, метель снаружи",
+    src: `${basePath}/images/renders/selling-gallery-interior.webp`,
+    alt: "Внутри галереи: тепло, свет, кофейни и книжные",
+    caption: "Внутри галереи: тепло, свет, кофейни и книжные",
   },
   {
-    src: `${basePath}/images/renders/frostpunk-thermal.webp`,
-    alt: "Теплообменная инфраструктура района",
-    caption: "Тепловое ядро: центральный теплообменник и сеть распределения",
+    src: `${basePath}/images/renders/selling-street-summer.webp`,
+    alt: "Летняя улица: деревья, кафе, трамвай, велодорожки",
+    caption: "Летняя улица: деревья, кафе, трамвай, велодорожки",
   },
   {
-    src: `${basePath}/images/renders/frostpunk-summer.webp`,
-    alt: "Район летом: парки, тень, открытые кафе",
-    caption: "Лето: теневые маршруты, прохладные сады и открытые террасы",
+    src: `${basePath}/images/renders/selling-playground.webp`,
+    alt: "Детская площадка под стеклянным куполом",
+    caption: "Детская площадка под стеклянным куполом",
   },
   {
-    src: `${basePath}/images/renders/hero-winter-aerial.webp`,
-    alt: "Зимний вид кольцевого района сверху ночью",
-    caption: "Зимняя ночь: тёплое ядро светится сквозь снежную бурю",
+    src: `${basePath}/images/renders/selling-tram.webp`,
+    alt: "Скандинавский трамвай: берёза, кожа, панорамные окна",
+    caption: "Скандинавский трамвай: берёза, кожа, панорамные окна",
+  },
+  {
+    src: `${basePath}/images/renders/selling-street-winter.webp`,
+    alt: "Зимний уют: тёплый свет галерей, праздничная атмосфера",
+    caption: "Зимний уют: тёплый свет галерей, праздничная атмосфера",
   },
   {
     src: `${basePath}/images/renders/hero-summer-aerial.webp`,
-    alt: "Летний вид кольцевого района с высоты",
-    caption: "Лето с высоты: зелёные парки и теневые маршруты на 60 000 жителей",
+    alt: "Лето: теневые маршруты и прохладные сады",
+    caption: "Лето: теневые маршруты и прохладные сады",
   },
   {
     src: `${basePath}/images/renders/gallery-tram.webp`,
-    alt: "Интерьер современного трамвая на кольцевой линии",
-    caption: "Кольцевой трамвай: тепло внутри, зима за окном",
-  },
-  {
-    src: `${basePath}/images/renders/gallery-playground.webp`,
-    alt: "Отапливаемая детская площадка зимой",
-    caption: "Детская площадка под стеклянным куполом: тепло и безопасно круглый год",
+    alt: "Трамвайное кольцо связывает все кварталы",
+    caption: "Трамвайное кольцо связывает все кварталы",
   },
 ];
 

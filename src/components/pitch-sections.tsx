@@ -1,15 +1,16 @@
 "use client";
 
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, useCallback, type ReactNode, type MouseEvent } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import styles from "./pitch.module.css";
 import { FrostpunkCityscape } from "./visuals/frostpunk-cityscape";
 import { FrostpunkStreet } from "./visuals/frostpunk-street";
 import { FrostpunkThermalCore } from "./visuals/frostpunk-thermal-core";
 import { FrostpunkSeasons } from "./visuals/frostpunk-seasons";
 
-/* ─── Scroll-triggered reveal ─── */
-function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+/* ─── Scroll-triggered reveal with optional 3D tilt ─── */
+function Reveal({ children, className, delay = 0, tilt = false }: { children: ReactNode; className?: string; delay?: number; tilt?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -29,11 +30,26 @@ function Reveal({ children, className, delay = 0 }: { children: ReactNode; class
     return () => observer.disconnect();
   }, []);
 
+  const handleMouseMove = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    if (!tilt || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width - 0.5;
+    const y = (e.clientY - rect.top) / rect.height - 0.5;
+    ref.current.style.transform = `perspective(800px) rotateY(${x * 8}deg) rotateX(${-y * 8}deg) scale(1.02)`;
+  }, [tilt]);
+
+  const handleMouseLeave = useCallback(() => {
+    if (!tilt || !ref.current) return;
+    ref.current.style.transform = "";
+  }, [tilt]);
+
   return (
     <div
       ref={ref}
-      className={`${styles.reveal} ${visible ? styles.revealVisible : ""} ${className ?? ""}`}
+      className={`${styles.reveal} ${visible ? styles.revealVisible : ""} ${tilt ? styles.tiltCard : ""} ${className ?? ""}`}
       style={{ transitionDelay: `${delay}ms` }}
+      onMouseMove={tilt ? handleMouseMove : undefined}
+      onMouseLeave={tilt ? handleMouseLeave : undefined}
     >
       {children}
     </div>
@@ -111,7 +127,7 @@ export function PitchProblem() {
       </Reveal>
       <div className={styles.problemGrid}>
         {problems.map((p, i) => (
-          <Reveal key={i} delay={i * 120} className={styles.problemCard}>
+          <Reveal key={i} delay={i * 120} className={styles.problemCard} tilt>
             <div className={styles.problemIcon}>{p.icon}</div>
             <h3 className={styles.problemCardTitle}>{p.title}</h3>
             <p className={styles.problemCardText}>{p.text}</p>
@@ -298,7 +314,7 @@ export function PitchHowItWorks() {
 
       <div className={styles.conceptsGrid}>
         {concepts.map((c, i) => (
-          <Reveal key={i} delay={i * 140} className={styles.conceptCard}>
+          <Reveal key={i} delay={i * 140} className={styles.conceptCard} tilt>
             <div className={styles.conceptIcon}>{c.icon}</div>
             <h3 className={styles.conceptCardTitle}>{c.title}</h3>
             <p className={styles.conceptCardText}>{c.text}</p>
@@ -412,12 +428,12 @@ export function PitchCTA() {
             Полный атлас района: генплан, кварталы, климатическая машина,
             сценарии энергии, стоимость и все источники
           </p>
-          <a href="/detailed" className={styles.ctaButton}>
+          <Link href="/detailed" className={styles.ctaButton}>
             <span>Полное исследование</span>
             <svg className={styles.ctaArrow} width="22" height="22" viewBox="0 0 22 22" fill="none" aria-hidden="true">
               <path d="M5 11h12M13 7l4 4-4 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-          </a>
+          </Link>
         </div>
       </Reveal>
     </section>

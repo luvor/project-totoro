@@ -521,6 +521,562 @@
 }
 
 /* ═══════════════════════════════════════════
+   PRICING / ECONOMICS SECTION
+   ═══════════════════════════════════════════ */
+
+/* ─── Comparison table ─── */
+.pricingCompare {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(240, 194, 127, 0.03), rgba(8, 17, 26, 0.7));
+  overflow: hidden;
+  margin-bottom: 32px;
+  backdrop-filter: blur(12px);
+}
+
+.pricingCompareHead {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pricingCompareHeadCell {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.pricingDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.pricingAccent {
+  color: var(--amber);
+}
+
+.pricingCompareRow {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr 1fr;
+  gap: 12px;
+  padding: 18px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  transition: background 0.3s ease;
+}
+
+.pricingCompareRow:last-child {
+  border-bottom: none;
+}
+
+.pricingCompareRow:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.pricingCompareMetric {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.95rem;
+  color: var(--text);
+}
+
+.pricingCompareIcon {
+  font-size: 1.2em;
+  opacity: 0.7;
+}
+
+.pricingCompareVal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.pricingCompareVal.pricingAccent {
+  color: var(--text);
+}
+
+.pricingSavings {
+  display: inline-flex;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(155, 207, 135, 0.12);
+  color: var(--moss);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+/* ─── CAPEX card ─── */
+.pricingCapex {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(8, 17, 26, 0.6));
+  padding: 32px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(12px);
+}
+
+.pricingCapexHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.pricingCapexTitle {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.2rem, 3vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
+.pricingCapexTotal {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--amber);
+}
+
+.pricingCapexSub {
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.pricingCounterUnit {
+  font-size: 0.65em;
+  font-weight: 400;
+  color: var(--amber);
+  opacity: 0.8;
+  margin-left: 2px;
+}
+
+/* ─── Animated bars ─── */
+.pricingBarRow {
+  margin-bottom: 16px;
+}
+
+.pricingBarRow:last-child {
+  margin-bottom: 0;
+}
+
+.pricingBarMeta {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 6px;
+}
+
+.pricingBarLabel {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.pricingBarAmount {
+  font-size: 0.82rem;
+  color: var(--muted);
+  font-family: var(--font-display), sans-serif;
+}
+
+.pricingBarTrack {
+  height: 8px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.06);
+  overflow: hidden;
+}
+
+.pricingBarFill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 1.4s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: width;
+}
+
+/* ─── ROI section ─── */
+.pricingRoi {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(8, 17, 26, 0.6));
+  padding: 32px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(12px);
+}
+
+.pricingRoiSub {
+  margin: 8px 0 24px;
+  color: var(--muted);
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+.pricingRoiSub strong {
+  color: var(--amber);
+}
+
+.pricingRoiSvg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ─── Per-unit callouts ─── */
+.pricingCallouts {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.pricingCallout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 6px;
+  padding: 32px 24px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(135deg, rgba(240, 194, 127, 0.05), rgba(8, 17, 26, 0.5));
+  backdrop-filter: blur(12px);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.pricingCallout:hover {
+  border-color: rgba(240, 194, 127, 0.2);
+  transform: translateY(-3px);
+}
+
+.pricingCalloutVal {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  background: linear-gradient(135deg, var(--amber), var(--copper));
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pricingCalloutLabel {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pricingCalloutNote {
+  font-size: 0.82rem;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+/* ═══════════════════════════════════════════
+   CINEMA / SHOWCASE SECTION
+   ═══════════════════════════════════════════ */
+.cinemaSection {
+  position: relative;
+  width: 100%;
+  padding: 80px 0;
+  overflow: hidden;
+}
+
+.cinemaViewport {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 80vh;
+  overflow: hidden;
+  border-radius: 0;
+  background: #040810;
+}
+
+.cinemaSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: opacity;
+}
+
+.cinemaSlideActive {
+  opacity: 1;
+}
+
+.cinemaImage {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform 6s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.cinemaImageActive {
+  animation: kenBurns 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes kenBurns {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.08) translate(-1%, -0.5%); }
+}
+
+.cinemaOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to top,
+    rgba(8, 17, 26, 0.85) 0%,
+    rgba(8, 17, 26, 0.2) 40%,
+    rgba(8, 17, 26, 0.1) 60%,
+    rgba(8, 17, 26, 0.4) 100%
+  );
+  pointer-events: none;
+}
+
+/* ─── Caption ─── */
+.cinemaCaptionWrap {
+  position: absolute;
+  bottom: 48px;
+  left: 24px;
+  right: 24px;
+  z-index: 2;
+  pointer-events: none;
+}
+
+.cinemaCaption {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1rem, 2.5vw, 1.5rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.4;
+  color: var(--text);
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  max-width: 700px;
+}
+
+.cinemaCursor {
+  display: inline-block;
+  color: var(--amber);
+  animation: cursorBlink 0.8s ease-in-out infinite;
+  margin-left: 2px;
+  font-weight: 300;
+}
+
+@keyframes cursorBlink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* ─── Navigation arrows ─── */
+.cinemaArrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  background: rgba(8, 17, 26, 0.5);
+  backdrop-filter: blur(8px);
+  color: var(--text);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.3s ease, background 0.3s ease, border-color 0.3s ease;
+}
+
+.cinemaSection:hover .cinemaArrow {
+  opacity: 1;
+}
+
+.cinemaArrow:hover {
+  background: rgba(240, 194, 127, 0.15);
+  border-color: rgba(240, 194, 127, 0.3);
+}
+
+.cinemaArrowLeft {
+  left: 16px;
+}
+
+.cinemaArrowRight {
+  right: 16px;
+}
+
+/* ─── Dots / progress ─── */
+.cinemaControls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.cinemaDots {
+  display: flex;
+  gap: 12px;
+}
+
+.cinemaDot {
+  position: relative;
+  width: 12px;
+  height: 12px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-radius: 50%;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+
+.cinemaDotActive {
+  border-color: var(--amber);
+  background: var(--amber);
+}
+
+.cinemaDotProgress {
+  position: absolute;
+  inset: -6px;
+  width: calc(100% + 12px);
+  height: calc(100% + 12px);
+  transform: rotate(-90deg);
+}
+
+.cinemaDotCircle {
+  animation: dotFill linear forwards;
+}
+
+@keyframes dotFill {
+  from { stroke-dashoffset: 100.53; }
+  to { stroke-dashoffset: 0; }
+}
+
+.cinemaPaused {
+  font-size: 0.75rem;
+  color: var(--muted);
+  opacity: 0.5;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════════
+   HERO PARTICLES (snow)
+   ═══════════════════════════════════════════ */
+.heroParticles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+
+.snowflake {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(246, 241, 232, 0.4);
+  animation: snowfall linear infinite;
+  will-change: transform;
+}
+
+@keyframes snowfall {
+  0% {
+    transform: translateY(-10px) translateX(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) translateX(40px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   GRADIENT FLOW BACKGROUND
+   ═══════════════════════════════════════════ */
+.heroGradientFlow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 80% 60% at 20% 80%, rgba(240, 194, 127, 0.06) 0%, transparent 60%),
+    radial-gradient(ellipse 60% 80% at 80% 20%, rgba(134, 182, 200, 0.05) 0%, transparent 60%);
+  animation: gradientShift 12s ease-in-out infinite alternate;
+}
+
+@keyframes gradientShift {
+  0% {
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 80%, rgba(240, 194, 127, 0.06) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 20%, rgba(134, 182, 200, 0.05) 0%, transparent 60%);
+  }
+  100% {
+    background:
+      radial-gradient(ellipse 80% 60% at 60% 40%, rgba(240, 194, 127, 0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 30% 70%, rgba(134, 182, 200, 0.07) 0%, transparent 60%);
+  }
+}
+
+/* ═══════════════════════════════════════════
+   3D CARD TILT
+   ═══════════════════════════════════════════ */
+.tiltCard {
+  transition: transform 0.15s ease-out;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+/* ═══════════════════════════════════════════
+   SECTION DIVIDERS
+   ═══════════════════════════════════════════ */
+.sectionDivider {
+  width: min(calc(100% - 64px), var(--max));
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line) 20%,
+    rgba(240, 194, 127, 0.2) 50%,
+    var(--line) 80%,
+    transparent 100%
+  );
+}
+
+/* ═══════════════════════════════════════════
    RESPONSIVE — TABLET
    ═══════════════════════════════════════════ */
 @media (min-width: 640px) {
@@ -538,6 +1094,26 @@
 
   .lifeGrid {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pricingCallouts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .cinemaViewport {
+    border-radius: var(--radius-xl);
+    margin: 0 24px;
+    width: calc(100% - 48px);
+  }
+
+  .cinemaCaption {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+  }
+
+  .cinemaCaptionWrap {
+    left: 40px;
+    right: 40px;
+    bottom: 56px;
   }
 }
 
@@ -563,6 +1139,22 @@
 
   .ctaContent {
     padding: 72px 48px;
+  }
+
+  .cinemaSection {
+    padding: 120px 0;
+  }
+
+  .cinemaViewport {
+    width: min(calc(100% - 64px), var(--max));
+    margin: 0 auto;
+    border-radius: var(--radius-xl);
+  }
+
+  .cinemaCaptionWrap {
+    left: 56px;
+    right: 56px;
+    bottom: 64px;
   }
 }
 
@@ -603,6 +1195,27 @@
   .ringPulse,
   .nodeGlow,
   .heroScroll {
+    animation: none;
+  }
+
+  .cinemaImageActive {
+    animation: none;
+  }
+
+  .pricingBarFill {
+    transition-duration: 0.3s;
+  }
+
+  .snowflake {
+    animation: none;
+    display: none;
+  }
+
+  .heroGradientFlow {
+    animation: none;
+  }
+
+  .cinemaDotCircle {
     animation: none;
   }
 }

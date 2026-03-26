@@ -117,6 +117,20 @@ button {
   cursor: pointer;
 }
 
+.section-divider {
+  width: min(calc(100% - 64px), var(--max));
+  margin: 0 auto;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--line) 20%,
+    rgba(240, 194, 127, 0.2) 50%,
+    var(--line) 80%,
+    transparent 100%
+  );
+}
+
 p,
 li,
 dd {

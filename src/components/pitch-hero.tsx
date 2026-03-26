@@ -1,11 +1,68 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import styles from "./pitch.module.css";
+
+/* ─── Snow particles ─── */
+function SnowParticles() {
+  const flakes = useMemo(() =>
+    Array.from({ length: 35 }, (_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      size: 2 + Math.random() * 3,
+      duration: 8 + Math.random() * 12,
+      delay: Math.random() * 10,
+      opacity: 0.15 + Math.random() * 0.3,
+    })),
+  []);
+
+  return (
+    <div className={styles.heroParticles} aria-hidden="true">
+      {flakes.map(f => (
+        <div
+          key={f.id}
+          className={styles.snowflake}
+          style={{
+            left: f.left,
+            width: `${f.size}px`,
+            height: `${f.size}px`,
+            animationDuration: `${f.duration}s`,
+            animationDelay: `${f.delay}s`,
+            opacity: f.opacity,
+          }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/* ─── Parallax scroll hook ─── */
+function useParallax(factor: number) {
+  const [offset, setOffset] = useState(0);
+
+  useEffect(() => {
+    let ticking = false;
+    function onScroll() {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(() => {
+          setOffset(window.scrollY * factor);
+          ticking = false;
+        });
+      }
+    }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [factor]);
+
+  return offset;
+}
 
 export function PitchHero() {
   const ringRef = useRef<SVGSVGElement>(null);
   const [visible, setVisible] = useState(false);
+  const parallaxRing = useParallax(0.15);
+  const parallaxContent = useParallax(0.06);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -14,7 +71,16 @@ export function PitchHero() {
 
   return (
     <section className={styles.hero} aria-label="Hero">
-      <div className={styles.heroRing}>
+      {/* Animated gradient background */}
+      <div className={styles.heroGradientFlow} aria-hidden="true" />
+
+      {/* Snow particles */}
+      <SnowParticles />
+
+      <div
+        className={styles.heroRing}
+        style={{ transform: `translateY(${parallaxRing}px)` }}
+      >
         <svg
           ref={ringRef}
           viewBox="0 0 800 800"
@@ -142,7 +208,10 @@ export function PitchHero() {
           </defs>
         </svg>
       </div>
-      <div className={`${styles.heroContent} ${visible ? styles.heroContentVisible : ""}`}>
+      <div
+        className={`${styles.heroContent} ${visible ? styles.heroContentVisible : ""}`}
+        style={{ transform: visible ? `translateY(${parallaxContent}px)` : undefined }}
+      >
         <span className={styles.heroKicker}>Климатический город</span>
         <h1 className={styles.heroTitle}>
           Тепловое

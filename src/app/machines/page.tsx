@@ -1,6 +1,27 @@
+import Image from "next/image";
 import { MachineSwitcher, NuclearSummerSimulator, ResilienceSimulator, ScrollReveal, SectionDivider } from "@/components/atlas-interactives";
-import { FooterPortal, PageMasthead, PageSection, SourceDisclosure } from "@/components/atlas-ui";
+import { FooterPortal, PageMasthead, PageSection, SourceDisclosure, VisualFrame } from "@/components/atlas-ui";
 import { district, machines } from "@/data/atlas";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+const machineRenders: Record<string, { src: string; alt: string; caption: string }> = {
+  "nuclear-fed-loop": {
+    src: `${basePath}/images/renders/machines-nuclear.webp`,
+    alt: "Атомный контур — визуализация сценария",
+    caption: "Региональная атомная опора с district cooling и сезонным storage.",
+  },
+  "hybrid-chp": {
+    src: `${basePath}/images/renders/machines-geothermal.webp`,
+    alt: "Гибридная ТЭЦ — визуализация сценария",
+    caption: "Геотермальная и газовая когенерация с локальными буферами.",
+  },
+  "all-electric-loop": {
+    src: `${basePath}/images/renders/machines-solar.webp`,
+    alt: "All-electric loop — визуализация сценария",
+    caption: "Полностью электрический контур на солнечной и ветровой генерации.",
+  },
+};
 
 export const metadata = {
   title: "Project Totoro — Machines",
@@ -19,6 +40,26 @@ export default function MachinesPage() {
         title="Лаборатория климатических машин"
         description="Климатический собор остаётся общим общественным образом, но инфраструктурный путь можно собирать как минимум тремя способами."
       />
+
+      <ScrollReveal>
+        <div className="card-grid three" style={{ marginBottom: 28 }}>
+          {machines.map((machine) => {
+            const render = machineRenders[machine.id];
+            if (!render) return null;
+            return (
+              <VisualFrame key={machine.id} title={machine.label} caption={render.caption}>
+                <Image
+                  src={render.src}
+                  alt={render.alt}
+                  width={420}
+                  height={280}
+                  style={{ width: "100%", height: "auto", borderRadius: "var(--radius-md)" }}
+                />
+              </VisualFrame>
+            );
+          })}
+        </div>
+      </ScrollReveal>
 
       <ScrollReveal>
         <PageSection

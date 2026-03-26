@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ScrollReveal, SectionDivider, VersionMatrix } from "@/components/atlas-interactives";
 import {
   ConfidenceBadge,
@@ -5,9 +6,12 @@ import {
   PageMasthead,
   PageSection,
   SourceDisclosure,
-  TrustBadge
+  TrustBadge,
+  VisualFrame
 } from "@/components/atlas-ui";
 import { variants } from "@/data/atlas";
+
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const metadata = {
   title: "Project Totoro — Versions",
@@ -33,6 +37,35 @@ export default function VersionsPage() {
         >
           <VersionMatrix variants={variants} />
         </PageSection>
+      </ScrollReveal>
+
+      <ScrollReveal>
+        <div className="svg-duo-grid" style={{ marginBottom: 28 }}>
+          <VisualFrame
+            title="Compact Climate Village"
+            caption="Компактный сценарий сохраняет пористость, деревья и дневной свет даже при минимальном бюджете."
+          >
+            <Image
+              src={`${basePath}/images/renders/versions-compact.webp`}
+              alt="Компактный климатический посёлок — вид сверху"
+              width={640}
+              height={400}
+              style={{ width: "100%", height: "auto", borderRadius: "var(--radius-md)" }}
+            />
+          </VisualFrame>
+          <VisualFrame
+            title="Flagship Sprawl"
+            caption="Flagship-район раскрывает полную климатическую логику с максимальным инженерным насыщением."
+          >
+            <Image
+              src={`${basePath}/images/renders/versions-sprawl.webp`}
+              alt="Flagship-район — панорамный вид"
+              width={640}
+              height={400}
+              style={{ width: "100%", height: "auto", borderRadius: "var(--radius-md)" }}
+            />
+          </VisualFrame>
+        </div>
       </ScrollReveal>
 
       <SectionDivider variant="glow" />

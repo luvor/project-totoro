@@ -9,6 +9,8 @@ import { FrostpunkStreet } from "./visuals/frostpunk-street";
 import { FrostpunkThermalCore } from "./visuals/frostpunk-thermal-core";
 import { FrostpunkSeasons } from "./visuals/frostpunk-seasons";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 /* ─── Scroll-triggered reveal with optional 3D tilt ─── */
 function Reveal({ children, className, delay = 0, tilt = false }: { children: ReactNode; className?: string; delay?: number; tilt?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -308,7 +310,7 @@ export function PitchHowItWorks() {
       {/* AI render — aerial */}
       <Reveal>
         <div className={styles.frostpunkVisual}>
-          <Image src="/images/renders/frostpunk-aerial.webp" alt="Кольцевой арктический район с высоты — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+          <Image src={`${basePath}/images/renders/frostpunk-aerial.webp`} alt="Кольцевой арктический район с высоты — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
         </div>
       </Reveal>
 
@@ -336,7 +338,7 @@ export function PitchHowItWorks() {
       {/* AI render — thermal core */}
       <Reveal>
         <div className={styles.frostpunkVisual}>
-          <Image src="/images/renders/frostpunk-thermal.webp" alt="Теплообменная инфраструктура района — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+          <Image src={`${basePath}/images/renders/frostpunk-thermal.webp`} alt="Теплообменная инфраструктура района — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
         </div>
       </Reveal>
     </section>
@@ -366,7 +368,7 @@ export function PitchLife() {
       {/* AI render — gallery */}
       <Reveal>
         <div className={styles.frostpunkVisual}>
-          <Image src="/images/renders/frostpunk-gallery.webp" alt="Отапливаемая стеклянная галерея изнутри — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+          <Image src={`${basePath}/images/renders/frostpunk-gallery.webp`} alt="Отапливаемая стеклянная галерея изнутри — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
         </div>
       </Reveal>
 
@@ -410,7 +412,7 @@ export function PitchLife() {
       {/* AI render — summer */}
       <Reveal>
         <div className={styles.frostpunkVisual}>
-          <Image src="/images/renders/frostpunk-summer.webp" alt="Район летом: парки, тень, открытые кафе — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
+          <Image src={`${basePath}/images/renders/frostpunk-summer.webp`} alt="Район летом: парки, тень, открытые кафе — AI-рендер" width={1200} height={675} style={{ width: "100%", height: "auto" }} />
         </div>
       </Reveal>
     </section>

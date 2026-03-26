@@ -4,27 +4,57 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Image from "next/image";
 import styles from "./pitch.module.css";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const slides = [
   {
-    src: "/images/renders/frostpunk-aerial.webp",
+    src: `${basePath}/images/renders/frostpunk-aerial.webp`,
     alt: "Кольцевой арктический район с высоты",
     caption: "Вид с высоты: кольцевая структура района, тепловое ядро и трамвайная петля",
   },
   {
-    src: "/images/renders/frostpunk-gallery.webp",
+    src: `${basePath}/images/renders/frostpunk-gallery.webp`,
     alt: "Отапливаемая стеклянная галерея изнутри",
     caption: "Зимние галереи: тепло и свет внутри, метель снаружи",
   },
   {
-    src: "/images/renders/frostpunk-thermal.webp",
+    src: `${basePath}/images/renders/frostpunk-thermal.webp`,
     alt: "Теплообменная инфраструктура района",
     caption: "Тепловое ядро: центральный теплообменник и сеть распределения",
   },
   {
-    src: "/images/renders/frostpunk-summer.webp",
+    src: `${basePath}/images/renders/frostpunk-summer.webp`,
     alt: "Район летом: парки, тень, открытые кафе",
     caption: "Лето: теневые маршруты, прохладные сады и открытые террасы",
   },
+  {
+    src: `${basePath}/images/renders/hero-winter-aerial.webp`,
+    alt: "Зимний вид кольцевого района сверху ночью",
+    caption: "Зимняя ночь: тёплое ядро светится сквозь снежную бурю",
+  },
+  {
+    src: `${basePath}/images/renders/hero-summer-aerial.webp`,
+    alt: "Летний вид кольцевого района с высоты",
+    caption: "Лето с высоты: зелёные парки и теневые маршруты на 60 000 жителей",
+  },
+  {
+    src: `${basePath}/images/renders/gallery-tram.webp`,
+    alt: "Интерьер современного трамвая на кольцевой линии",
+    caption: "Кольцевой трамвай: тепло внутри, зима за окном",
+  },
+  {
+    src: `${basePath}/images/renders/gallery-playground.webp`,
+    alt: "Отапливаемая детская площадка зимой",
+    caption: "Детская площадка под стеклянным куполом: тепло и безопасно круглый год",
+  },
+];
+
+/* Ken Burns variants — each slide gets a different zoom+pan direction */
+const kenBurnsVariants = [
+  styles.kenBurnsA,
+  styles.kenBurnsB,
+  styles.kenBurnsC,
+  styles.kenBurnsD,
 ];
 
 const SLIDE_DURATION = 5000;
@@ -68,6 +98,17 @@ export function PitchCinema() {
     return () => { if (timerRef.current) clearInterval(timerRef.current); };
   }, [isPaused, isVisible, next]);
 
+  /* Keyboard navigation */
+  useEffect(() => {
+    if (!isVisible) return;
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === "ArrowRight") { next(); e.preventDefault(); }
+      else if (e.key === "ArrowLeft") { prev(); e.preventDefault(); }
+    }
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isVisible, next, prev]);
+
   return (
     <section
       ref={sectionRef}
@@ -89,7 +130,9 @@ export function PitchCinema() {
               alt={slide.alt}
               width={1920}
               height={1080}
-              className={`${styles.cinemaImage} ${i === current ? styles.cinemaImageActive : ""}`}
+              className={`${styles.cinemaImage} ${
+                i === current ? kenBurnsVariants[i % kenBurnsVariants.length] : ""
+              }`}
               priority={i === 0}
             />
           </div>
@@ -98,7 +141,7 @@ export function PitchCinema() {
         {/* Dark gradient overlay for readability */}
         <div className={styles.cinemaOverlay} />
 
-        {/* ─── Caption with typewriter effect ─── */}
+        {/* ─── Caption with typewriter effect + glow backdrop ─── */}
         <div className={styles.cinemaCaptionWrap}>
           <TypewriterCaption key={captionKey} text={slides[current].caption} />
         </div>
@@ -112,31 +155,37 @@ export function PitchCinema() {
         </button>
       </div>
 
-      {/* ─── Progress bar + dots ─── */}
+      {/* ─── Progress line + dots ─── */}
       <div className={styles.cinemaControls}>
-        <div className={styles.cinemaDots}>
+        {/* Linear progress bar */}
+        <div className={styles.cinemaProgressBar}>
           {slides.map((_, i) => (
             <button
               key={i}
-              className={`${styles.cinemaDot} ${i === current ? styles.cinemaDotActive : ""}`}
+              className={`${styles.cinemaProgressSegment} ${
+                i < current ? styles.cinemaProgressDone :
+                i === current ? styles.cinemaProgressCurrent : ""
+              }`}
               onClick={() => goTo(i)}
               aria-label={`Слайд ${i + 1}`}
             >
               {i === current && !isPaused && isVisible && (
-                <svg className={styles.cinemaDotProgress} viewBox="0 0 36 36">
-                  <circle cx="18" cy="18" r="16" fill="none" stroke="var(--amber)" strokeWidth="2"
-                    strokeDasharray="100.53" strokeDashoffset="100.53"
-                    className={styles.cinemaDotCircle}
-                    style={{ animationDuration: `${SLIDE_DURATION}ms` }}
-                  />
-                </svg>
+                <div
+                  className={styles.cinemaProgressFill}
+                  style={{ animationDuration: `${SLIDE_DURATION}ms` }}
+                />
               )}
             </button>
           ))}
         </div>
-        {isPaused && (
-          <span className={styles.cinemaPaused}>Пауза</span>
-        )}
+        <div className={styles.cinemaControlsMeta}>
+          <span className={styles.cinemaCounter}>
+            {String(current + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+          </span>
+          {isPaused && (
+            <span className={styles.cinemaPaused}>Пауза</span>
+          )}
+        </div>
       </div>
     </section>
   );

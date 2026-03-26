@@ -31,6 +31,29 @@
   overflow: hidden;
 }
 
+/* ─── Hero background image ─── */
+.heroBgWrap {
+  position: absolute;
+  inset: -40px;
+  z-index: 0;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.heroBgImage {
+  object-fit: cover;
+  object-position: center 40%;
+  filter: saturate(0.6) brightness(0.4);
+}
+
+.heroBgOverlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 60% at 50% 50%, transparent 0%, rgba(8, 17, 26, 0.95) 70%),
+    linear-gradient(to bottom, rgba(8, 17, 26, 0.6) 0%, rgba(8, 17, 26, 0.3) 40%, rgba(8, 17, 26, 0.85) 100%);
+}
+
 .heroRing {
   position: absolute;
   inset: 0;
@@ -118,19 +141,102 @@
   color: var(--muted);
 }
 
+/* ─── Hero metric badges ─── */
+.heroMetrics {
+  display: flex;
+  gap: 12px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.heroMetric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 10px 18px;
+  border: 1px solid rgba(240, 194, 127, 0.15);
+  border-radius: var(--radius-lg);
+  background: rgba(240, 194, 127, 0.05);
+  backdrop-filter: blur(8px);
+  opacity: 0;
+  transform: translateY(12px);
+  animation: heroMetricIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.heroMetricVal {
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--amber);
+}
+
+.heroMetricLabel {
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+  opacity: 0.7;
+}
+
+@keyframes heroMetricIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Scroll indicator (mouse icon) ─── */
 .heroScroll {
   position: absolute;
   bottom: 32px;
   left: 50%;
   transform: translateX(-50%);
-  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
   opacity: 0.4;
-  animation: heroScrollBounce 2s ease-in-out infinite;
+  animation: heroScrollFade 2.5s ease-in-out infinite;
 }
 
-@keyframes heroScrollBounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
+.heroScrollMouse {
+  width: 20px;
+  height: 32px;
+  border: 1.5px solid var(--muted);
+  border-radius: 10px;
+  position: relative;
+}
+
+.heroScrollWheel {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 6px;
+  border-radius: 2px;
+  background: var(--amber);
+  animation: heroScrollWheelMove 2s ease-in-out infinite;
+}
+
+.heroScrollText {
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--muted);
+}
+
+@keyframes heroScrollFade {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes heroScrollWheelMove {
+  0%, 100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+  50% { transform: translateX(-50%) translateY(8px); opacity: 0.3; }
 }
 
 /* ─── Ring animations ─── */
@@ -524,6 +630,72 @@
    PRICING / ECONOMICS SECTION
    ═══════════════════════════════════════════ */
 
+/* ─── Visual comparison SVG ─── */
+.pricingVisualCompare {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  margin-bottom: 32px;
+  background: #060a14;
+}
+
+.pricingVisualCompare svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* ─── What's included grid ─── */
+.pricingIncluded {
+  border: 1px solid var(--line);
+  border-radius: var(--radius-xl);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(8, 17, 26, 0.6));
+  padding: 32px;
+  margin-bottom: 32px;
+  backdrop-filter: blur(12px);
+}
+
+.pricingIncludedGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.pricingIncludedItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.3s ease, transform 0.3s ease;
+}
+
+.pricingIncludedItem:hover {
+  border-color: rgba(240, 194, 127, 0.2);
+  transform: translateY(-2px);
+}
+
+.pricingIncludedIcon {
+  font-size: 1.6rem;
+  margin-bottom: 4px;
+}
+
+.pricingIncludedTitle {
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.pricingIncludedDesc {
+  font-size: 0.82rem;
+  color: var(--muted);
+  line-height: 1.4;
+}
+
 /* ─── Comparison table ─── */
 .pricingCompare {
   border: 1px solid var(--line);
@@ -830,17 +1002,44 @@
   height: 100%;
   object-fit: cover;
   transform: scale(1);
-  transition: transform 6s cubic-bezier(0.22, 1, 0.36, 1);
   will-change: transform;
 }
 
-.cinemaImageActive {
-  animation: kenBurns 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+/* Ken Burns variants — each slide gets a different zoom+pan direction */
+.kenBurnsA {
+  animation: kenBurnsA 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-@keyframes kenBurns {
+.kenBurnsB {
+  animation: kenBurnsB 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.kenBurnsC {
+  animation: kenBurnsC 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.kenBurnsD {
+  animation: kenBurnsD 5.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes kenBurnsA {
   0% { transform: scale(1) translate(0, 0); }
   100% { transform: scale(1.08) translate(-1%, -0.5%); }
+}
+
+@keyframes kenBurnsB {
+  0% { transform: scale(1.04) translate(0.5%, 0); }
+  100% { transform: scale(1.1) translate(-0.5%, -1%); }
+}
+
+@keyframes kenBurnsC {
+  0% { transform: scale(1) translate(0, 0); }
+  100% { transform: scale(1.06) translate(1%, 0.5%); }
+}
+
+@keyframes kenBurnsD {
+  0% { transform: scale(1.03) translate(-0.5%, 0.5%); }
+  100% { transform: scale(1.09) translate(0.5%, -0.5%); }
 }
 
 .cinemaOverlay {
@@ -874,7 +1073,10 @@
   letter-spacing: -0.02em;
   line-height: 1.4;
   color: var(--text);
-  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.6);
+  text-shadow:
+    0 2px 20px rgba(0, 0, 0, 0.8),
+    0 4px 40px rgba(0, 0, 0, 0.5),
+    0 0 80px rgba(0, 0, 0, 0.3);
   max-width: 700px;
 }
 
@@ -929,58 +1131,79 @@
   right: 16px;
 }
 
-/* ─── Dots / progress ─── */
+/* ─── Progress bar (cinematic) ─── */
 .cinemaControls {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
-  padding: 20px 0;
+  gap: 10px;
+  padding: 20px 24px;
 }
 
-.cinemaDots {
+.cinemaProgressBar {
   display: flex;
-  gap: 12px;
+  gap: 4px;
+  width: min(100%, 480px);
 }
 
-.cinemaDot {
+.cinemaProgressSegment {
   position: relative;
-  width: 12px;
-  height: 12px;
-  border: 1.5px solid rgba(255, 255, 255, 0.25);
-  border-radius: 50%;
-  background: none;
+  flex: 1;
+  height: 3px;
+  border: none;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
   cursor: pointer;
   padding: 0;
-  transition: border-color 0.3s ease, background 0.3s ease;
+  overflow: hidden;
+  transition: background 0.3s ease;
 }
 
-.cinemaDotActive {
-  border-color: var(--amber);
+.cinemaProgressSegment:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.cinemaProgressDone {
   background: var(--amber);
 }
 
-.cinemaDotProgress {
+.cinemaProgressCurrent {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.cinemaProgressFill {
   position: absolute;
-  inset: -6px;
-  width: calc(100% + 12px);
-  height: calc(100% + 12px);
-  transform: rotate(-90deg);
+  inset: 0;
+  background: var(--amber);
+  border-radius: 2px;
+  transform-origin: left;
+  animation: progressFill linear forwards;
 }
 
-.cinemaDotCircle {
-  animation: dotFill linear forwards;
+@keyframes progressFill {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
 }
 
-@keyframes dotFill {
-  from { stroke-dashoffset: 100.53; }
-  to { stroke-dashoffset: 0; }
+.cinemaControlsMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.cinemaCounter {
+  font-family: var(--font-display), sans-serif;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+  opacity: 0.5;
+  letter-spacing: 0.06em;
 }
 
 .cinemaPaused {
-  font-size: 0.75rem;
-  color: var(--muted);
-  opacity: 0.5;
+  font-size: 0.72rem;
+  color: var(--amber);
+  opacity: 0.6;
   text-transform: uppercase;
   letter-spacing: 0.1em;
 }
@@ -998,27 +1221,69 @@
 
 .snowflake {
   position: absolute;
-  width: 4px;
-  height: 4px;
+  top: -10px;
   border-radius: 50%;
-  background: rgba(246, 241, 232, 0.4);
-  animation: snowfall linear infinite;
-  will-change: transform;
+  background: rgba(246, 241, 232, 0.5);
+  will-change: transform, opacity;
 }
 
-@keyframes snowfall {
+/* Three sine-wave drift variants for natural snow motion */
+.snowDriftA {
+  animation: snowDriftA linear infinite;
+}
+
+.snowDriftB {
+  animation: snowDriftB linear infinite;
+}
+
+.snowDriftC {
+  animation: snowDriftC linear infinite;
+}
+
+@keyframes snowDriftA {
   0% {
-    transform: translateY(-10px) translateX(0) rotate(0deg);
+    transform: translateY(-10px) translateX(0);
     opacity: 0;
   }
-  10% {
-    opacity: 1;
-  }
-  90% {
-    opacity: 1;
-  }
+  5% { opacity: 1; }
+  25% { transform: translateY(25vh) translateX(var(--drift-amp, 30px)); }
+  50% { transform: translateY(50vh) translateX(calc(var(--drift-amp, 30px) * -0.5)); }
+  75% { transform: translateY(75vh) translateX(var(--drift-amp, 30px)); }
+  95% { opacity: 1; }
   100% {
-    transform: translateY(100vh) translateX(40px) rotate(360deg);
+    transform: translateY(105vh) translateX(calc(var(--drift-amp, 30px) * -0.3));
+    opacity: 0;
+  }
+}
+
+@keyframes snowDriftB {
+  0% {
+    transform: translateY(-10px) translateX(0);
+    opacity: 0;
+  }
+  5% { opacity: 1; }
+  20% { transform: translateY(20vh) translateX(calc(var(--drift-amp, 30px) * -0.8)); }
+  45% { transform: translateY(45vh) translateX(var(--drift-amp, 30px)); }
+  70% { transform: translateY(70vh) translateX(calc(var(--drift-amp, 30px) * -0.6)); }
+  95% { opacity: 1; }
+  100% {
+    transform: translateY(105vh) translateX(calc(var(--drift-amp, 30px) * 0.4));
+    opacity: 0;
+  }
+}
+
+@keyframes snowDriftC {
+  0% {
+    transform: translateY(-10px) translateX(0);
+    opacity: 0;
+  }
+  8% { opacity: 1; }
+  30% { transform: translateY(30vh) translateX(calc(var(--drift-amp, 30px) * 0.6)); }
+  55% { transform: translateY(55vh) translateX(calc(var(--drift-amp, 30px) * -1)); }
+  80% { transform: translateY(80vh) translateX(calc(var(--drift-amp, 30px) * 0.3)); }
+  92% { opacity: 1; }
+  100% {
+    transform: translateY(105vh) translateX(calc(var(--drift-amp, 30px) * -0.7));
     opacity: 0;
   }
 }
@@ -1097,6 +1362,10 @@
   }
 
   .pricingCallouts {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .pricingIncludedGrid {
     grid-template-columns: repeat(3, 1fr);
   }
 
@@ -1194,19 +1463,37 @@
   .ringRotateSlow,
   .ringPulse,
   .nodeGlow,
-  .heroScroll {
+  .heroScroll,
+  .heroScrollWheel {
     animation: none;
   }
 
-  .cinemaImageActive {
+  .heroMetric {
     animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .kenBurnsA,
+  .kenBurnsB,
+  .kenBurnsC,
+  .kenBurnsD {
+    animation: none;
+  }
+
+  .cinemaProgressFill {
+    animation: none;
+    transform: scaleX(1);
   }
 
   .pricingBarFill {
     transition-duration: 0.3s;
   }
 
-  .snowflake {
+  .snowflake,
+  .snowDriftA,
+  .snowDriftB,
+  .snowDriftC {
     animation: none;
     display: none;
   }
@@ -1215,7 +1502,4 @@
     animation: none;
   }
 
-  .cinemaDotCircle {
-    animation: none;
-  }
 }

@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./pitch.module.css";
+import { PricingComparisonGraphic } from "./visuals/pricing-comparison";
 
 /* ─── Scroll-triggered reveal ─── */
 function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
@@ -139,10 +140,20 @@ const capexItems = [
   { label: "Общественные пространства", percent: 10, amount: "$240M", color: "linear-gradient(90deg, var(--sand), #d4c9b8)" },
 ];
 
-/* ─── ROI SVG Chart ─── */
+const includedItems = [
+  { icon: "🏠", title: "Жильё", desc: "15 000 квартир с климат-контролем" },
+  { icon: "🚋", title: "Трамвай", desc: "Кольцевая линия на 10 км" },
+  { icon: "🔥", title: "Тепловое ядро", desc: "Центральный теплообменник" },
+  { icon: "🌳", title: "Парки", desc: "40% зелёных территорий" },
+  { icon: "🏥", title: "Здравоохранение", desc: "Клиника и поликлиника" },
+  { icon: "🏫", title: "Образование", desc: "3 школы, 5 детских садов" },
+];
+
+/* ─── ROI SVG Chart with hover tooltips ─── */
 function ROIChart() {
   const ref = useRef<SVGSVGElement>(null);
   const [visible, setVisible] = useState(false);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
   useEffect(() => {
     const el = ref.current;
@@ -187,7 +198,13 @@ function ROIChart() {
   const breakevenPt = pts[4];
 
   return (
-    <svg ref={ref} viewBox={`0 0 ${w} ${h}`} className={styles.pricingRoiSvg} aria-label="ROI timeline">
+    <svg
+      ref={ref}
+      viewBox={`0 0 ${w} ${h}`}
+      className={styles.pricingRoiSvg}
+      aria-label="ROI timeline"
+      onMouseLeave={() => setHoveredIdx(null)}
+    >
       {/* grid lines */}
       {[-100, -50, 0, 50, 100, 150].map(v => {
         const y = py + ch - ((v - minV) / range) * ch;
@@ -208,9 +225,34 @@ function ROIChart() {
         strokeDasharray="900" strokeDashoffset={visible ? 0 : 900}
         style={{ transition: "stroke-dashoffset 2.2s cubic-bezier(0.22, 1, 0.36, 1) 0.3s" }}
       />
-      {/* data points */}
+      {/* data points with hover targets */}
       {pts.map((p, i) => (
-        <circle key={i} cx={p.x} cy={p.y} r={visible ? 4 : 0} fill={p.val >= 0 ? "var(--moss)" : "var(--copper)"} style={{ transition: `r 0.3s ease ${0.3 + i * 0.15}s` }} />
+        <g key={i} onMouseEnter={() => setHoveredIdx(i)} style={{ cursor: "pointer" }}>
+          {/* Invisible larger hit area */}
+          <circle cx={p.x} cy={p.y} r={16} fill="transparent" />
+          {/* Visible dot */}
+          <circle cx={p.x} cy={p.y} r={visible ? (hoveredIdx === i ? 6 : 4) : 0} fill={p.val >= 0 ? "var(--moss)" : "var(--copper)"} style={{ transition: `r 0.3s ease ${0.3 + i * 0.15}s` }} />
+          {/* Hover tooltip */}
+          {hoveredIdx === i && visible && (
+            <g>
+              <rect
+                x={p.x - 48} y={p.y - 42}
+                width="96" height="28"
+                rx="6"
+                fill="rgba(8, 17, 26, 0.9)"
+                stroke={p.val >= 0 ? "var(--moss)" : "var(--copper)"}
+                strokeWidth="1"
+              />
+              <text
+                x={p.x} y={p.y - 24}
+                fill="var(--text)" fontSize="11" fontWeight="600"
+                textAnchor="middle" fontFamily="var(--font-display), system-ui"
+              >
+                Год {p.year}: {p.val >= 0 ? "+" : ""}{p.val}%
+              </text>
+            </g>
+          )}
+        </g>
       ))}
       {/* breakeven marker */}
       <circle cx={breakevenPt.x} cy={breakevenPt.y} r={visible ? 8 : 0} fill="var(--amber)" opacity="0.9" style={{ transition: "r 0.4s ease 1.6s" }} />
@@ -249,7 +291,14 @@ export function PitchPricing() {
         <h2 className={styles.sectionTitle}>Инвестиция в&nbsp;будущее</h2>
       </Reveal>
 
-      {/* ── Comparison table ── */}
+      {/* ── Visual comparison graphic ── */}
+      <Reveal>
+        <div className={styles.pricingVisualCompare}>
+          <PricingComparisonGraphic />
+        </div>
+      </Reveal>
+
+      {/* ── Comparison table (card-style rows) ── */}
       <Reveal>
         <div className={styles.pricingCompare}>
           <div className={styles.pricingCompareHead}>
@@ -301,6 +350,22 @@ export function PitchPricing() {
               delay={i * 140}
             />
           ))}
+        </div>
+      </Reveal>
+
+      {/* ── What's included ── */}
+      <Reveal delay={150}>
+        <div className={styles.pricingIncluded}>
+          <h3 className={styles.pricingCapexTitle}>Что входит в инвестицию</h3>
+          <div className={styles.pricingIncludedGrid}>
+            {includedItems.map((item, i) => (
+              <div key={i} className={styles.pricingIncludedItem}>
+                <span className={styles.pricingIncludedIcon}>{item.icon}</span>
+                <span className={styles.pricingIncludedTitle}>{item.title}</span>
+                <span className={styles.pricingIncludedDesc}>{item.desc}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </Reveal>
 

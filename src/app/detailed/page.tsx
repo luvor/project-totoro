@@ -1,3 +1,4 @@
+import Image from "next/image";
 import {
   AnimatedMetricStrip,
   CostPanel,
@@ -30,6 +31,8 @@ import {
 } from "@/components/atlas-visuals";
 import { claims, district, machines, mainSections, metrics, personas, rules, trustLegend } from "@/data/atlas";
 
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
 const coreMetrics = metrics.filter((metric) =>
   ["population", "district-area", "service-radius", "summer-shade", "base-capex", "step-free"].includes(metric.id)
 );
@@ -45,6 +48,13 @@ export default function DetailedPage() {
       <div className="gradient-mesh" aria-hidden="true" />
 
       <header className="home-hero-shell" id="hero">
+        <Image
+          src={`${basePath}/images/renders/hero-winter-aerial.webp`}
+          alt=""
+          fill
+          priority
+          style={{ objectFit: "cover", opacity: 0.18, zIndex: 0, pointerEvents: "none" }}
+        />
         <div className="hero-particles" aria-hidden="true" />
         <SiteTopline activePage="Detailed" />
         <div className="home-hero-grid">

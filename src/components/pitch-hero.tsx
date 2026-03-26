@@ -1,19 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState, useMemo } from "react";
+import Image from "next/image";
 import styles from "./pitch.module.css";
 
-/* ─── Snow particles ─── */
+const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+
+/* ─── Snow particles — natural drift with sine-wave motion ─── */
 function SnowParticles() {
   const flakes = useMemo(() =>
-    Array.from({ length: 35 }, (_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      size: 2 + Math.random() * 3,
-      duration: 8 + Math.random() * 12,
-      delay: Math.random() * 10,
-      opacity: 0.15 + Math.random() * 0.3,
-    })),
+    Array.from({ length: 50 }, (_, i) => {
+      const speed = 10 + Math.random() * 18; // 10-28s fall time
+      const size = 1.5 + Math.random() * 3.5;
+      const driftAmp = 20 + Math.random() * 60; // sine-wave drift amplitude
+      const driftFreq = 0.5 + Math.random() * 1.5; // wave frequency
+      return {
+        id: i,
+        left: `${Math.random() * 100}%`,
+        size,
+        duration: speed,
+        delay: Math.random() * 15,
+        opacity: 0.1 + Math.random() * 0.4,
+        driftAmp,
+        driftFreq,
+        // Assign one of 3 animation variants for variety
+        variant: i % 3,
+      };
+    }),
   []);
 
   return (
@@ -21,7 +34,11 @@ function SnowParticles() {
       {flakes.map(f => (
         <div
           key={f.id}
-          className={styles.snowflake}
+          className={`${styles.snowflake} ${
+            f.variant === 0 ? styles.snowDriftA :
+            f.variant === 1 ? styles.snowDriftB :
+            styles.snowDriftC
+          }`}
           style={{
             left: f.left,
             width: `${f.size}px`,
@@ -29,7 +46,8 @@ function SnowParticles() {
             animationDuration: `${f.duration}s`,
             animationDelay: `${f.delay}s`,
             opacity: f.opacity,
-          }}
+            "--drift-amp": `${f.driftAmp}px`,
+          } as React.CSSProperties}
         />
       ))}
     </div>
@@ -42,6 +60,9 @@ function useParallax(factor: number) {
 
   useEffect(() => {
     let ticking = false;
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mq.matches) return;
+
     function onScroll() {
       if (!ticking) {
         ticking = true;
@@ -58,11 +79,19 @@ function useParallax(factor: number) {
   return offset;
 }
 
+/* ─── Metric badges ─── */
+const heroMetrics = [
+  { value: "60 000", label: "жителей" },
+  { value: "−40…+35°", label: "комфорт" },
+  { value: "12 лет", label: "окупаемость" },
+];
+
 export function PitchHero() {
   const ringRef = useRef<SVGSVGElement>(null);
   const [visible, setVisible] = useState(false);
   const parallaxRing = useParallax(0.15);
   const parallaxContent = useParallax(0.06);
+  const parallaxBg = useParallax(0.08);
 
   useEffect(() => {
     const t = setTimeout(() => setVisible(true), 100);
@@ -71,6 +100,23 @@ export function PitchHero() {
 
   return (
     <section className={styles.hero} aria-label="Hero">
+      {/* Background render with dark overlay */}
+      <div
+        className={styles.heroBgWrap}
+        style={{ transform: `translateY(${parallaxBg}px)` }}
+        aria-hidden="true"
+      >
+        <Image
+          src={`${basePath}/images/renders/hero-winter-aerial.webp`}
+          alt=""
+          fill
+          priority
+          className={styles.heroBgImage}
+          sizes="100vw"
+        />
+        <div className={styles.heroBgOverlay} />
+      </div>
+
       {/* Animated gradient background */}
       <div className={styles.heroGradientFlow} aria-hidden="true" />
 
@@ -223,11 +269,28 @@ export function PitchHero() {
           <br />
           круглый год — от &minus;40 до +35
         </p>
+
+        {/* Metric badges */}
+        <div className={styles.heroMetrics}>
+          {heroMetrics.map((m, i) => (
+            <div
+              key={i}
+              className={styles.heroMetric}
+              style={{ animationDelay: `${1.2 + i * 0.15}s` }}
+            >
+              <span className={styles.heroMetricVal}>{m.value}</span>
+              <span className={styles.heroMetricLabel}>{m.label}</span>
+            </div>
+          ))}
+        </div>
       </div>
+
+      {/* Scroll indicator — improved with mouse icon */}
       <div className={styles.heroScroll} aria-hidden="true">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M12 5v14M5 12l7 7 7-7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-        </svg>
+        <div className={styles.heroScrollMouse}>
+          <div className={styles.heroScrollWheel} />
+        </div>
+        <span className={styles.heroScrollText}>scroll</span>
       </div>
     </section>
   );

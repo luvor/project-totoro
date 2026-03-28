@@ -1069,8 +1069,7 @@ tr:last-child td {
     radial-gradient(ellipse 500px 500px at 80% 15%, rgba(134, 182, 200, 0.06), transparent),
     radial-gradient(ellipse 700px 300px at 50% 60%, rgba(155, 207, 135, 0.04), transparent),
     radial-gradient(ellipse 400px 600px at 85% 75%, rgba(239, 148, 97, 0.05), transparent);
-  animation: mesh-drift 60s ease-in-out infinite alternate;
-  will-change: background-position;
+  will-change: auto;
 }
 
 @keyframes mesh-drift {
@@ -1783,6 +1782,141 @@ tr:last-child td {
   .svg-duo-grid {
     grid-template-columns: 1fr;
     gap: 18px;
+  }
+}
+
+/* ═══════════════════════════════════════════
+   ENHANCED SCROLL ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+/* Story card staggered entrance */
+.story-band .story-card {
+  opacity: 0;
+  transform: translateY(24px);
+  animation: storyCardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-play-state: paused;
+}
+
+.scroll-reveal.is-visible .story-card {
+  animation-play-state: running;
+}
+
+.story-band .story-card:nth-child(1) { animation-delay: 0s; }
+.story-band .story-card:nth-child(2) { animation-delay: 0.1s; }
+.story-band .story-card:nth-child(3) { animation-delay: 0.2s; }
+.story-band .story-card:nth-child(4) { animation-delay: 0.3s; }
+.story-band .story-card:nth-child(5) { animation-delay: 0.4s; }
+
+@keyframes storyCardIn {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Card grid alternating entrance */
+.card-grid .reason-card,
+.card-grid .claim-card,
+.card-grid .feature-panel {
+  position: relative;
+  overflow: hidden;
+}
+
+.card-grid .reason-card::after,
+.card-grid .claim-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(240, 194, 127, 0.04),
+    transparent
+  );
+  transform: skewX(-15deg);
+  pointer-events: none;
+  transition: left 0.8s ease;
+}
+
+.card-grid .reason-card:hover::after,
+.card-grid .claim-card:hover::after {
+  left: 150%;
+}
+
+/* Section intro text subtle fade-up */
+.scroll-reveal .section-intro h2 {
+  background: linear-gradient(
+    90deg,
+    var(--text) 0%,
+    var(--text) 40%,
+    rgba(240, 194, 127, 0.7) 50%,
+    var(--text) 60%,
+    var(--text) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: atlasShimmer 10s ease-in-out infinite;
+}
+
+@keyframes atlasShimmer {
+  0%, 100% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+}
+
+/* Explorer card interactive glow effect */
+.explorer-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.explorer-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    circle at 50% 50%,
+    rgba(240, 194, 127, 0.06) 0%,
+    transparent 50%
+  );
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.explorer-card:hover::before {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .story-band .story-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .card-grid .reason-card::after,
+  .card-grid .claim-card::after {
+    display: none;
+  }
+
+  .scroll-reveal .section-intro h2 {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--text);
+  }
+
+  .explorer-card::before {
+    display: none;
   }
 }
 

@@ -298,8 +298,8 @@
 }
 
 @keyframes nodeGlowAnim {
-  0%, 100% { r: 8; opacity: 0.4; }
-  50% { r: 14; opacity: 0.7; }
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.75); opacity: 0.7; }
 }
 
 /* ═══════════════════════════════════════════
@@ -1602,6 +1602,202 @@
 }
 
 /* ═══════════════════════════════════════════
+   ENHANCED ANIMATIONS
+   ═══════════════════════════════════════════ */
+
+/* ─── Section title gradient shimmer ─── */
+.sectionTitle {
+  background: linear-gradient(
+    90deg,
+    var(--text) 0%,
+    var(--text) 40%,
+    var(--amber) 50%,
+    var(--text) 60%,
+    var(--text) 100%
+  );
+  background-size: 200% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: titleShimmer 8s ease-in-out infinite;
+}
+
+@keyframes titleShimmer {
+  0%, 100% { background-position: 100% 50%; }
+  50% { background-position: 0% 50%; }
+}
+
+/* ─── Problem card glowing border pulse ─── */
+.problemCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.problemCard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    transparent 0%,
+    rgba(239, 148, 97, 0.3) 50%,
+    transparent 100%
+  );
+  background-size: 300% 300%;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  animation: cardBorderShift 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.problemCard:hover::before {
+  opacity: 1;
+}
+
+@keyframes cardBorderShift {
+  0%, 100% { background-position: 0% 0%; }
+  50% { background-position: 100% 100%; }
+}
+
+/* ─── Concept card icon gentle float ─── */
+.conceptIcon {
+  animation: iconFloat 4s ease-in-out infinite;
+}
+
+.conceptCard:nth-child(2) .conceptIcon { animation-delay: -1s; }
+.conceptCard:nth-child(3) .conceptIcon { animation-delay: -2s; }
+.conceptCard:nth-child(4) .conceptIcon { animation-delay: -3s; }
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+/* ─── Metric tile hover shine sweep ─── */
+.metricTile {
+  position: relative;
+  overflow: hidden;
+}
+
+.metricTile::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -75%;
+  width: 50%;
+  height: 200%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(240, 194, 127, 0.06),
+    transparent
+  );
+  transform: skewX(-20deg);
+  transition: left 0.6s ease;
+  pointer-events: none;
+}
+
+.metricTile:hover::after {
+  left: 125%;
+}
+
+/* ─── Life card animated left accent border ─── */
+.lifeCard {
+  position: relative;
+  border-left: 3px solid rgba(240, 194, 127, 0);
+  transition: border-color 0.3s ease, border-left-color 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.revealVisible.lifeCard,
+.lifeCard:hover {
+  border-left-color: var(--amber);
+}
+
+/* ─── CTA button pulsating glow ─── */
+.ctaButton {
+  position: relative;
+}
+
+.ctaButton::before {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: inherit;
+  background: linear-gradient(135deg, var(--amber), var(--copper));
+  opacity: 0;
+  z-index: -1;
+  filter: blur(16px);
+  animation: ctaGlow 3s ease-in-out infinite;
+}
+
+@keyframes ctaGlow {
+  0%, 100% { opacity: 0.15; transform: scale(1); }
+  50% { opacity: 0.35; transform: scale(1.05); }
+}
+
+/* ─── Section kicker entrance animation ─── */
+.sectionKicker {
+  position: relative;
+  overflow: hidden;
+}
+
+.sectionKicker::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(240, 194, 127, 0.15), transparent);
+  animation: kickerSweep 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes kickerSweep {
+  0%, 100% { left: -100%; }
+  50% { left: 100%; }
+}
+
+/* ─── Frostpunk visual subtle breathing ─── */
+.frostpunkVisual {
+  animation: frostBreath 6s ease-in-out infinite;
+}
+
+@keyframes frostBreath {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(240, 194, 127, 0); }
+  50% { box-shadow: 0 0 30px -5px rgba(240, 194, 127, 0.1); }
+}
+
+/* ─── 3D tilt card shimmer on hover ─── */
+.tiltCard {
+  position: relative;
+  overflow: hidden;
+}
+
+.tiltCard::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+    rgba(240, 194, 127, 0.08) 0%,
+    transparent 60%
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.tiltCard:hover::after {
+  opacity: 1;
+}
+
+/* ═══════════════════════════════════════════
    REDUCED MOTION
    ═══════════════════════════════════════════ */
 @media (prefers-reduced-motion: reduce) {
@@ -1696,5 +1892,46 @@
 
   .visionTab {
     transition: none;
+  }
+
+  .sectionTitle {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--text);
+  }
+
+  .problemCard::before {
+    display: none;
+  }
+
+  .conceptIcon {
+    animation: none;
+  }
+
+  .metricTile::after {
+    display: none;
+  }
+
+  .lifeCard {
+    transition: none;
+    border-left-color: var(--amber);
+  }
+
+  .ctaButton::before {
+    animation: none;
+    display: none;
+  }
+
+  .sectionKicker::after {
+    animation: none;
+    display: none;
+  }
+
+  .frostpunkVisual {
+    animation: none;
+  }
+
+  .tiltCard::after {
+    display: none;
   }
 }

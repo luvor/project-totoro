@@ -6,3 +6,6 @@ out
 .env
 .playwright-cli
 output/playwright
+
+# Root-level screenshot artifacts
+/*.png

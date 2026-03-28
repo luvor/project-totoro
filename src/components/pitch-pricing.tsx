@@ -155,7 +155,7 @@ function RunningCounter({ perSecond }: { perSecond: number }) {
 
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion) {
-      setDisplay("847 500");
+      setDisplay("22 000 000 000");
       return;
     }
 
@@ -182,11 +182,11 @@ const comparisons = [
 ];
 
 const capexItems = [
-  { label: "Жилая застройка", percent: 45, amount: "$1.08B", color: "linear-gradient(90deg, var(--amber), var(--copper))" },
-  { label: "Тепловая инфраструктура", percent: 20, amount: "$480M", color: "linear-gradient(90deg, var(--copper), #e07040)" },
-  { label: "Транспорт (трамвай)", percent: 15, amount: "$360M", color: "linear-gradient(90deg, var(--steel), #6a9ab5)" },
-  { label: "Зелёная инфраструктура", percent: 10, amount: "$240M", color: "linear-gradient(90deg, var(--moss), #7ab86a)" },
-  { label: "Общественные пространства", percent: 10, amount: "$240M", color: "linear-gradient(90deg, var(--sand), #d4c9b8)" },
+  { label: "Жилая застройка", percent: 45, amount: "887 млрд ₸", color: "linear-gradient(90deg, var(--amber), var(--copper))" },
+  { label: "Тепловая инфраструктура", percent: 20, amount: "394 млрд ₸", color: "linear-gradient(90deg, var(--copper), #e07040)" },
+  { label: "Транспорт (трамвай)", percent: 15, amount: "296 млрд ₸", color: "linear-gradient(90deg, var(--steel), #6a9ab5)" },
+  { label: "Зелёная инфраструктура", percent: 10, amount: "197 млрд ₸", color: "linear-gradient(90deg, var(--moss), #7ab86a)" },
+  { label: "Общественные пространства", percent: 10, amount: "197 млрд ₸", color: "linear-gradient(90deg, var(--sand), #d4c9b8)" },
 ];
 
 const includedItems = [
@@ -200,8 +200,8 @@ const includedItems = [
 
 /* ─── Loss aversion data ─── */
 const lossItems = [
-  { amount: "$2 800", label: "/год на отоплении", icon: "🔥", sublabel: "разница vs. тепловое кольцо" },
-  { amount: "$1 500", label: "/год на здоровье", icon: "🏥", sublabel: "простуды, стресс от холода" },
+  { amount: "2,3 млн ₸", label: "/год на отоплении", icon: "🔥", sublabel: "разница vs. тепловое кольцо" },
+  { amount: "1,2 млн ₸", label: "/год на здоровье", icon: "🏥", sublabel: "простуды, стресс от холода" },
   { amount: "+2%", label: "вместо +8%", icon: "📉", sublabel: "рост стоимости жилья в год" },
 ];
 
@@ -438,11 +438,11 @@ function SavingsCalculator() {
   const { ref, visible } = useScrollVisible(0.15);
 
   // Cumulative savings calculation
-  // Annual savings: $2,800 heating + $1,500 health + property appreciation delta
-  const annualSavingsPerFamily = 4300; // heating + health
+  // Annual savings: 2.3M + 1.2M ₸ heating + health + property appreciation delta
+  const annualSavingsPerFamily = 3500000; // heating + health in tenge
   const families = 15000;
   const annualPropertyDelta = 0.06; // 8% vs 2% = 6% delta
-  const avgPropertyValue = 250000;
+  const avgPropertyValue = 205000000; // ~205 млн ₸
 
   const cumulativeSavings = (() => {
     let total = 0;
@@ -453,7 +453,7 @@ function SavingsCalculator() {
     return total;
   })();
 
-  const displaySavings = (cumulativeSavings / 1e9).toFixed(1);
+  const displaySavings = (cumulativeSavings / 1e12).toFixed(1);
   const barWidth = visible ? Math.min((years / 30) * 100, 100) : 0;
 
   return (
@@ -546,7 +546,7 @@ function SavingsCalculator() {
             letterSpacing: "-0.03em",
             transition: reducedMotion ? "none" : "all 0.3s ease",
           }}>
-            ${displaySavings} млрд
+            {displaySavings} трлн ₸
           </div>
           <div style={{ color: "var(--muted)", fontSize: "0.85rem", marginTop: 4 }}>
             совокупная экономия
@@ -568,7 +568,7 @@ function SavingsCalculator() {
             letterSpacing: "-0.03em",
             transition: reducedMotion ? "none" : "all 0.3s ease",
           }}>
-            ${Math.round(cumulativeSavings / families).toLocaleString("ru-RU").replace(/\u00a0/g, " ")}
+            {(cumulativeSavings / families / 1e6).toFixed(1)} млн ₸
           </div>
           <div style={{ color: "var(--muted)", fontSize: "0.85rem", marginTop: 4 }}>
             экономия на семью
@@ -620,16 +620,16 @@ function CostComparisonChart() {
   const maxYear = 25;
   const maxCost = 200; // thousands per household cumulative
 
-  // Conventional: starts at 0, rises ~$6K/yr accelerating (maintenance + energy inflation)
-  // Thermal Ring: starts at 0, rises ~$3K/yr initially, stabilizes after year 8
+  // Conventional: starts at 0, rises ~5M ₸/yr accelerating (maintenance + energy inflation)
+  // Thermal Ring: starts at 0, rises ~2.9M ₸/yr initially, stabilizes after year 8
   const conventionalData = Array.from({ length: maxYear + 1 }, (_, y) => ({
     year: y,
-    cost: y * 6 + y * y * 0.12, // accelerating
+    cost: y * 6 + y * y * 0.12, // accelerating (units = M ₸)
   }));
 
   const thermalData = Array.from({ length: maxYear + 1 }, (_, y) => ({
     year: y,
-    cost: y <= 8 ? y * 3.5 : 28 + (y - 8) * 1.8, // stabilizing after year 8
+    cost: y <= 8 ? y * 3.5 : 28 + (y - 8) * 1.8, // stabilizing after year 8 (units = M ₸)
   }));
 
   const toX = (year: number) => px + (year / maxYear) * cw;
@@ -695,7 +695,7 @@ function CostComparisonChart() {
           return (
             <g key={v}>
               <line x1={px} y1={y} x2={w - px} y2={y} stroke="var(--line)" strokeWidth="0.5" />
-              <text x={px - 8} y={y + 4} fill="var(--muted)" fontSize="9" textAnchor="end" opacity="0.6">${v}K</text>
+              <text x={px - 8} y={y + 4} fill="var(--muted)" fontSize="9" textAnchor="end" opacity="0.6">{v}М₸</text>
             </g>
           );
         })}
@@ -806,10 +806,10 @@ function CostComparisonChart() {
               strokeWidth="1"
             />
             <text x={toX(hoveredYear)} y={py + 14} fill="#7a8694" fontSize="10" textAnchor="middle" fontFamily="var(--font-display), system-ui">
-              Обычный: ${Math.round(conventionalData[hoveredYear].cost)}K
+              Обычный: {Math.round(conventionalData[hoveredYear].cost)} млн ₸
             </text>
             <text x={toX(hoveredYear)} y={py + 30} fill="var(--amber)" fontSize="10" fontWeight="600" textAnchor="middle" fontFamily="var(--font-display), system-ui">
-              Кольцо: ${Math.round(thermalData[hoveredYear].cost)}K
+              Кольцо: {Math.round(thermalData[hoveredYear].cost)} млн ₸
             </text>
           </g>
         )}
@@ -928,7 +928,7 @@ function DonutChart() {
             opacity={visible ? 1 : 0}
             style={{ transition: "opacity 0.5s ease 1s" }}
           >
-            {hoveredIdx !== null ? segments[hoveredIdx].amount : "$2.4B"}
+            {hoveredIdx !== null ? segments[hoveredIdx].amount : "1,97 трлн ₸"}
           </text>
           <text
             x={cx} y={cy + 14}
@@ -994,7 +994,7 @@ function PropertyValueBars() {
   const years = [1, 2, 3, 5, 7, 10];
   const conventionalRate = 1.02;
   const thermalRate = 1.08;
-  const baseValue = 250; // $250K
+  const baseValue = 205; // 205 млн ₸
 
   const data = years.map(y => ({
     year: y,
@@ -1024,7 +1024,7 @@ function PropertyValueBars() {
         Рост стоимости недвижимости
       </h3>
       <p style={{ margin: "0 0 24px", color: "var(--muted)", fontSize: "0.9rem" }}>
-        Квартира $250K — обычный район (+2%/год) vs Тепловое Кольцо (+8%/год)
+        Квартира 205 млн ₸ — обычный район (+2%/год) vs Тепловое Кольцо (+8%/год)
       </p>
 
       <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -1053,7 +1053,7 @@ function PropertyValueBars() {
                   color: "var(--moss)",
                   fontWeight: 700,
                 }}>
-                  +${delta.toLocaleString("ru-RU").replace(/\u00a0/g, " ")}K
+                  +{delta.toLocaleString("ru-RU").replace(/\u00a0/g, " ")} млн ₸
                 </span>
               </div>
 
@@ -1085,7 +1085,7 @@ function PropertyValueBars() {
                   fontWeight: 600,
                   flexShrink: 0,
                 }}>
-                  ${d.conventional}K
+                  {d.conventional} М₸
                 </span>
               </div>
 
@@ -1117,7 +1117,7 @@ function PropertyValueBars() {
                   fontWeight: 600,
                   flexShrink: 0,
                 }}>
-                  ${d.thermal}K
+                  {d.thermal} М₸
                 </span>
               </div>
             </div>
@@ -1140,7 +1140,7 @@ function PropertyValueBars() {
           fontWeight: 700,
           color: "var(--moss)",
         }}>
-          +${(data[data.length - 1].thermal - data[data.length - 1].conventional).toLocaleString("ru-RU").replace(/\u00a0/g, " ")}K
+          +{(data[data.length - 1].thermal - data[data.length - 1].conventional).toLocaleString("ru-RU").replace(/\u00a0/g, " ")} млн ₸
         </span>
         <span style={{ color: "var(--muted)", fontSize: "0.88rem", marginLeft: 8 }}>
           разница за 10 лет на каждую квартиру
@@ -1254,7 +1254,7 @@ export function PitchPricing() {
             WebkitTextFillColor: "transparent",
             marginBottom: 16,
           }}>
-            <Counter target={2.4} suffix=" млрд $" prefix="" />
+            <Counter target={1.97} suffix=" трлн ₸" prefix="" />
           </div>
 
           {/* Reframe arrow */}
@@ -1293,7 +1293,7 @@ export function PitchPricing() {
                 color: "var(--text)",
                 letterSpacing: "-0.03em",
               }}>
-                <Counter target={40000} suffix="" prefix="$" />
+                <Counter target={32.8} suffix=" млн ₸" prefix="" />
               </div>
               <div style={{ color: "var(--muted)", fontSize: "0.9rem", marginTop: 4 }}>
                 на жителя
@@ -1456,7 +1456,7 @@ export function PitchPricing() {
             lineHeight: 1,
             marginBottom: 8,
           }}>
-            $27 млн
+            22 млрд ₸
           </div>
           <div style={{
             color: "var(--muted)",
@@ -1483,7 +1483,7 @@ export function PitchPricing() {
               fontWeight: 700,
               color: "var(--copper)",
             }}>
-              $<RunningCounter perSecond={0.856} />
+              <RunningCounter perSecond={702} /> ₸
             </span>
           </div>
         </div>
@@ -1716,7 +1716,7 @@ export function PitchPricing() {
 
       {/* CAPEX breakdown — expandable */}
       <Reveal delay={100}>
-        <ExpandableSection title="Подробнее: Структура CAPEX ($2.4 млрд)">
+        <ExpandableSection title="Подробнее: Структура CAPEX (1,97 трлн ₸)">
           <div style={{ marginBottom: 20 }}>
             <div style={{
               display: "flex",
@@ -1735,7 +1735,7 @@ export function PitchPricing() {
                 fontWeight: 700,
                 color: "var(--amber)",
               }}>
-                <Counter target={2.4} suffix=" млрд $" prefix="~" />
+                <Counter target={1.97} suffix=" трлн ₸" prefix="~" />
                 <span style={{
                   fontSize: "0.78rem",
                   fontWeight: 400,
@@ -1781,14 +1781,14 @@ export function PitchPricing() {
       <div className={styles.pricingCallouts}>
         <Reveal delay={0} className={styles.pricingCallout}>
           <span className={styles.pricingCalloutVal}>
-            <Counter target={40000} suffix="" prefix="$" />
+            <Counter target={32.8} suffix=" млн ₸" prefix="" />
           </span>
           <span className={styles.pricingCalloutLabel}>на жителя</span>
           <span className={styles.pricingCalloutNote}>дополнительно vs обычный район</span>
         </Reveal>
         <Reveal delay={150} className={styles.pricingCallout}>
           <span className={styles.pricingCalloutVal}>
-            <Counter target={120} suffix="/м²" prefix="+$" />
+            <Counter target={99} suffix=" тыс ₸/м²" prefix="+" />
           </span>
           <span className={styles.pricingCalloutLabel}>доплата за площадь</span>
           <span className={styles.pricingCalloutNote}>климатическая инфраструктура</span>

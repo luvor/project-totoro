@@ -287,7 +287,7 @@ export const PricingExplainer: React.FC = () => {
                 lineHeight: 1,
               }}
             >
-              $2.4 млрд
+              1,97 трлн ₸
             </div>
             <div
               style={{
@@ -317,7 +317,7 @@ export const PricingExplainer: React.FC = () => {
                   letterSpacing: "-0.02em",
                 }}
               >
-                $40K
+                32,8 млн ₸
               </div>
               <div
                 style={{

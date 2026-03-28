@@ -146,7 +146,7 @@
     "id": "base-capex",
     "theme": "cost",
     "label": "Base build-out CAPEX",
-    "value": "1.97",
+    "value": "1.971",
     "unit": "трлн ₸",
     "target": "Без земли, trunk-подключений и стоимости капитала",
     "status": "estimate",

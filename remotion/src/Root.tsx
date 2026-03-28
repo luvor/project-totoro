@@ -4,6 +4,7 @@ import { PricingExplainer } from "./compositions/PricingExplainer";
 import { MasterplanOverview } from "./compositions/MasterplanOverview";
 import { MachineScenarios } from "./compositions/MachineScenarios";
 import { DistrictMetrics } from "./compositions/DistrictMetrics";
+import { CorridorWalkthrough } from "./compositions/CorridorWalkthrough";
 
 export const RemotionRoot: React.FC = () => {
   return (
@@ -44,6 +45,14 @@ export const RemotionRoot: React.FC = () => {
         id="DistrictMetrics"
         component={DistrictMetrics}
         durationInFrames={270}
+        fps={30}
+        width={1920}
+        height={1080}
+      />
+      <Composition
+        id="CorridorWalkthrough"
+        component={CorridorWalkthrough}
+        durationInFrames={360}
         fps={30}
         width={1920}
         height={1080}

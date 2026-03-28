@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import styles from "./pitch.module.css";
 import { PricingComparisonGraphic } from "./visuals/pricing-comparison";
+import { SchemaRenderToggle } from "./atlas-interactives";
 
 const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
@@ -191,9 +192,9 @@ const capexItems = [
 
 const includedItems = [
   { icon: "🏠", title: "Жильё", desc: "15 000 квартир с климат-контролем" },
-  { icon: "🚋", title: "Трамвай", desc: "Кольцевая линия на 10 км" },
+  { icon: "🚋", title: "Трамвай", desc: "Кольцевая линия на 9,6 км" },
   { icon: "🔥", title: "Тепловое ядро", desc: "Центральный теплообменник" },
-  { icon: "🌳", title: "Парки", desc: "40% зелёных территорий" },
+  { icon: "🌳", title: "Парки", desc: "34% территории — общественные пространства" },
   { icon: "🏥", title: "Здравоохранение", desc: "Клиника и поликлиника" },
   { icon: "🏫", title: "Образование", desc: "3 школы, 5 детских садов" },
 ];
@@ -618,18 +619,18 @@ function CostComparisonChart() {
   const w = 640, h = 320, px = 56, py = 32;
   const cw = w - px * 2, ch = h - py * 2;
   const maxYear = 25;
-  const maxCost = 200; // thousands per household cumulative
+  const maxCost = 180; // cumulative TCO in M₸
 
-  // Conventional: starts at 0, rises ~5M ₸/yr accelerating (maintenance + energy inflation)
-  // Thermal Ring: starts at 0, rises ~2.9M ₸/yr initially, stabilizes after year 8
+  // Conventional: no big CAPEX, but growing operating costs (heating, maintenance, inflation)
+  // Thermal Ring: high upfront CAPEX (~35), but low operating costs — crossover ~year 12
   const conventionalData = Array.from({ length: maxYear + 1 }, (_, y) => ({
     year: y,
-    cost: y * 6 + y * y * 0.12, // accelerating (units = M ₸)
+    cost: y * 3.5 + y * y * 0.12,
   }));
 
   const thermalData = Array.from({ length: maxYear + 1 }, (_, y) => ({
     year: y,
-    cost: y <= 8 ? y * 3.5 : 28 + (y - 8) * 1.8, // stabilizing after year 8 (units = M ₸)
+    cost: 35 + y * 2.0,
   }));
 
   const toX = (year: number) => px + (year / maxYear) * cw;
@@ -643,11 +644,12 @@ function CostComparisonChart() {
     .map((d, i) => `${i === 0 ? "M" : "L"}${toX(d.year)},${toY(d.cost)}`)
     .join(" ");
 
-  // Crossover year (where conventional cumulative > thermal cumulative)
-  // This happens around year 12
-  const crossoverYear = 12;
+  // Dynamically find crossover year (where conventional overtakes thermal)
+  const crossoverYear = conventionalData.findIndex(
+    (d, i) => i > 0 && d.cost >= thermalData[i].cost
+  );
   const crossoverX = toX(crossoverYear);
-  const crossoverY = toY(conventionalData[crossoverYear].cost);
+  const crossoverY = toY((conventionalData[crossoverYear].cost + thermalData[crossoverYear].cost) / 2);
 
   return (
     <div ref={ref} style={{
@@ -690,7 +692,7 @@ function CostComparisonChart() {
         onMouseLeave={() => setHoveredYear(null)}
       >
         {/* Grid lines */}
-        {[0, 50, 100, 150, 200].map(v => {
+        {[0, 50, 100, 150].map(v => {
           const y = toY(v);
           return (
             <g key={v}>
@@ -706,17 +708,22 @@ function CostComparisonChart() {
         ))}
         <text x={w / 2} y={h} fill="var(--muted)" fontSize="9" textAnchor="middle" opacity="0.5">лет</text>
 
-        {/* Shaded area between curves showing savings */}
-        <path
-          d={`${thermalPath} ${conventionalData
-            .slice()
-            .reverse()
-            .map((d, i) => `L${toX(d.year)},${toY(d.cost)}`)
-            .join(" ")} Z`}
-          fill="var(--moss)"
-          opacity={visible ? 0.08 : 0}
-          style={{ transition: "opacity 1s ease 0.5s" }}
-        />
+        {/* Shaded area between curves showing savings (only after crossover) */}
+        {crossoverYear > 0 && (
+          <path
+            d={`M${toX(crossoverYear)},${toY(conventionalData[crossoverYear].cost)} ${conventionalData
+              .slice(crossoverYear)
+              .map((d) => `L${toX(d.year)},${toY(d.cost)}`)
+              .join(" ")} ${thermalData
+              .slice(crossoverYear)
+              .reverse()
+              .map((d) => `L${toX(d.year)},${toY(d.cost)}`)
+              .join(" ")} Z`}
+            fill="var(--moss)"
+            opacity={visible ? 0.12 : 0}
+            style={{ transition: "opacity 1s ease 0.5s" }}
+          />
+        )}
 
         {/* Conventional line — grey, rising */}
         <path
@@ -928,7 +935,7 @@ function DonutChart() {
             opacity={visible ? 1 : 0}
             style={{ transition: "opacity 0.5s ease 1s" }}
           >
-            {hoveredIdx !== null ? segments[hoveredIdx].amount : "1,97 трлн ₸"}
+            {hoveredIdx !== null ? segments[hoveredIdx].amount : "1,971 трлн ₸"}
           </text>
           <text
             x={cx} y={cy + 14}
@@ -1254,7 +1261,7 @@ export function PitchPricing() {
             WebkitTextFillColor: "transparent",
             marginBottom: 16,
           }}>
-            <Counter target={1.97} suffix=" трлн ₸" prefix="" />
+            <Counter target={1.971} suffix=" трлн ₸" prefix="" />
           </div>
 
           {/* Reframe arrow */}
@@ -1492,7 +1499,12 @@ export function PitchPricing() {
       {/* ── Visual comparison graphic ── */}
       <Reveal>
         <div className={styles.pricingVisualCompare}>
-          <PricingComparisonGraphic />
+          <SchemaRenderToggle
+            renderSrc={`${basePath}/images/renders/pricing-district-model.webp`}
+            renderAlt="Модель района — визуализация стоимости"
+          >
+            <PricingComparisonGraphic />
+          </SchemaRenderToggle>
         </div>
       </Reveal>
 
@@ -1716,7 +1728,7 @@ export function PitchPricing() {
 
       {/* CAPEX breakdown — expandable */}
       <Reveal delay={100}>
-        <ExpandableSection title="Подробнее: Структура CAPEX (1,97 трлн ₸)">
+        <ExpandableSection title="Подробнее: Структура CAPEX (1,971 трлн ₸)">
           <div style={{ marginBottom: 20 }}>
             <div style={{
               display: "flex",
@@ -1735,7 +1747,7 @@ export function PitchPricing() {
                 fontWeight: 700,
                 color: "var(--amber)",
               }}>
-                <Counter target={1.97} suffix=" трлн ₸" prefix="~" />
+                <Counter target={1.971} suffix=" трлн ₸" prefix="~" />
                 <span style={{
                   fontSize: "0.78rem",
                   fontWeight: 400,

@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
+import Image from "next/image";
 import type {
   ClimateMode,
   ClimateModeId,
@@ -609,7 +610,7 @@ export function NuclearSummerSimulator({ machine }: { machine: MachineSpec }) {
             ))}
           </dl>
           <p className="machine-simulator-note">
-            Здесь не “лишнее тепло куда-то девают”, а меняется режим системы: тепловой отбор уменьшается, а cooling, storage, ГВС и export играют разную роль.
+            Здесь не "лишнее тепло куда-то девают", а меняется режим системы: тепловой отбор уменьшается, а cooling, storage, ГВС и export играют разную роль.
           </p>
         </article>
       </div>
@@ -860,32 +861,48 @@ export function CostPanel({
 }
 
 export function SummerComfortScene() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <div className="visual-stack">
-      <VisualFrame
-        title="Summer Comfort Scene"
-        caption="Летний город проектируется не только от фасада, а от тени, night purge, cooling commons и tree canopy."
+      <SchemaRenderToggle
+        renderSrc={`${basePath}/images/renders/frostpunk-summer.webp`}
+        renderAlt="Летний комфорт — улица с тенью и зеленью"
       >
-        <SummerStreetGraphic />
-      </VisualFrame>
-      <VisualFrame
-        title="Annual Climate Calendar"
-        caption="Один район, но несколько сезонных operational modes. Поэтому проект не разваливается на “зимнюю” и “летнюю” версию."
+        <VisualFrame
+          title="Summer Comfort Scene"
+          caption="Летний город проектируется не только от фасада, а от тени, night purge, cooling commons и tree canopy."
+        >
+          <SummerStreetGraphic />
+        </VisualFrame>
+      </SchemaRenderToggle>
+      <SchemaRenderToggle
+        renderSrc=""
+        renderAlt="Сезонный календарь — рендер в разработке"
       >
-        <SeasonalCalendarGraphic />
-      </VisualFrame>
+        <VisualFrame
+          title="Annual Climate Calendar"
+          caption={'Один район, но несколько сезонных operational modes. Поэтому проект не разваливается на "зимнюю" и "летнюю" версию.'}
+        >
+          <SeasonalCalendarGraphic />
+        </VisualFrame>
+      </SchemaRenderToggle>
     </div>
   );
 }
 
 export function FlourishingShowcase() {
   return (
-    <VisualFrame
-      title="Human Flourishing OS"
-      caption="Слой процветания не обещает биологических чудес, а показывает, какие городские системы поддерживают свет, движение, зелень, покой и belonging."
+    <SchemaRenderToggle
+      renderSrc=""
+      renderAlt="Human Flourishing OS — рендер в разработке"
     >
-      <FlourishingWheelGraphic />
-    </VisualFrame>
+      <VisualFrame
+        title="Human Flourishing OS"
+        caption="Слой процветания не обещает биологических чудес, а показывает, какие городские системы поддерживают свет, движение, зелень, покой и belonging."
+      >
+        <FlourishingWheelGraphic />
+      </VisualFrame>
+    </SchemaRenderToggle>
   );
 }
 
@@ -900,6 +917,68 @@ export function PrintButton() {
     >
       Печать / PDF
     </button>
+  );
+}
+
+export function SchemaRenderToggle({
+  children,
+  renderSrc,
+  renderAlt,
+}: {
+  children: React.ReactNode;
+  renderSrc: string;
+  renderAlt: string;
+}) {
+  const panelPrefix = useId();
+  const [view, setView] = useState<"schema" | "render">("schema");
+
+  const hasRender = renderSrc.length > 0;
+
+  return (
+    <div className="schema-render-toggle">
+      <SegmentedTabs
+        items={[
+          { id: "schema" as const, label: "Схема" },
+          { id: "render" as const, label: "Рендер" },
+        ]}
+        value={view}
+        onChange={setView}
+        label="Переключение: схема или рендер"
+        panelPrefix={panelPrefix}
+      />
+      <div className="schema-render-viewport">
+        <div
+          className="schema-render-layer"
+          data-active={view === "schema"}
+          role="tabpanel"
+          id={`${panelPrefix}-schema-panel`}
+          aria-hidden={view !== "schema"}
+        >
+          {children}
+        </div>
+        <div
+          className="schema-render-layer"
+          data-active={view === "render"}
+          role="tabpanel"
+          id={`${panelPrefix}-render-panel`}
+          aria-hidden={view !== "render"}
+        >
+          {hasRender ? (
+            <Image
+              src={renderSrc}
+              alt={renderAlt}
+              width={960}
+              height={600}
+              style={{ width: "100%", height: "auto" }}
+            />
+          ) : (
+            <div className="render-placeholder">
+              {renderAlt || "Рендер в разработке"}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }
 

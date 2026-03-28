@@ -129,6 +129,33 @@ export function MasterplanGraphic({
 
       <circle cx="290" cy="260" r="148" fill="none" stroke={palette.accent} strokeWidth="4" strokeDasharray="12 8" strokeOpacity="0.5" />
 
+      {/* Gallery corridors connecting adjacent quarters */}
+      {[
+        [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0],
+      ].map(([a, b]) => {
+        const from = quarterNodes[a];
+        const to = quarterNodes[b];
+        return (
+          <g key={`gallery-${a}-${b}`}>
+            <line
+              x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+              stroke={palette.accent}
+              strokeWidth="6"
+              strokeOpacity="0.08"
+              strokeLinecap="round"
+            />
+            <line
+              x1={from.x} y1={from.y} x2={to.x} y2={to.y}
+              stroke={palette.accent}
+              strokeWidth="1.5"
+              strokeOpacity="0.35"
+              strokeLinecap="round"
+              strokeDasharray={isSummer ? "6 4" : "0"}
+            />
+          </g>
+        );
+      })}
+
       {quarterNodes.map((node) => (
         <g key={`stop-${node.id}`}>
           <circle cx={node.x} cy={node.y} r="6" fill="#fff" stroke={palette.accent} strokeWidth="2" />

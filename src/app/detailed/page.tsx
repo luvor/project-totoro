@@ -9,6 +9,7 @@ import {
   PersonaRoutesExplorer,
   ResilienceSimulator,
   RulebookOverlay,
+  SchemaRenderToggle,
   ScrollReveal,
   SectionDivider,
   SummerComfortScene
@@ -139,8 +140,18 @@ export default function DetailedPage() {
         >
           <MasterplanExplorer quarters={district.quarters} modes={district.climateModes} />
           <div className="svg-duo-grid">
-            <DistrictPlanGraphic />
-            <ZoneLayoutGraphic />
+            <SchemaRenderToggle
+              renderSrc={`${basePath}/images/renders/frostpunk-aerial.webp`}
+              renderAlt="Генплан района — аэросъёмка"
+            >
+              <DistrictPlanGraphic />
+            </SchemaRenderToggle>
+            <SchemaRenderToggle
+              renderSrc=""
+              renderAlt="Зонирование района — рендер в разработке"
+            >
+              <ZoneLayoutGraphic />
+            </SchemaRenderToggle>
           </div>
         </PageSection>
       </ScrollReveal>
@@ -168,7 +179,12 @@ export default function DetailedPage() {
           text="Климатический собор остаётся общим образом во всех сценариях, но технологии, зависимости и летние режимы различаются. Поэтому сайт не продаёт одну магическую истину."
         >
           <MachineSwitcher machines={machines} />
-          <ClimateModesGraphic />
+          <SchemaRenderToggle
+            renderSrc=""
+            renderAlt="Климатические режимы — рендер в разработке"
+          >
+            <ClimateModesGraphic />
+          </SchemaRenderToggle>
         </PageSection>
       </ScrollReveal>
 
@@ -219,7 +235,12 @@ export default function DetailedPage() {
               <MetricStrip items={flourishingMetrics} />
             </div>
           </div>
-          <MetricsInfographic />
+          <SchemaRenderToggle
+            renderSrc=""
+            renderAlt="Метрики процветания — рендер в разработке"
+          >
+            <MetricsInfographic />
+          </SchemaRenderToggle>
         </PageSection>
       </ScrollReveal>
 

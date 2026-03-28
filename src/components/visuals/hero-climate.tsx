@@ -254,6 +254,39 @@ export function HeroClimateGraphic({ mode }: { mode: ClimateModeId }) {
         </g>
       ))}
 
+      {/* Heated gallery corridors between quarters (winter/blizzard: solid warm; summer/heat: subtle) */}
+      {[
+        [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0],
+      ].map(([a, b]) => {
+        const from = quarterLayouts[a];
+        const to = quarterLayouts[b];
+        const fx = from.buildings[0].x + 10;
+        const fy = from.buildings[0].y + 10;
+        const tx = to.buildings[0].x + 10;
+        const ty = to.buildings[0].y + 10;
+        return (
+          <g key={`corridor-${a}-${b}`}>
+            {isWinter && (
+              <line
+                x1={fx} y1={fy} x2={tx} y2={ty}
+                stroke={p.glow}
+                strokeWidth="5"
+                strokeOpacity="0.06"
+                strokeLinecap="round"
+              />
+            )}
+            <line
+              x1={fx} y1={fy} x2={tx} y2={ty}
+              stroke={p.accent}
+              strokeWidth={isWinter ? "1.5" : "0.8"}
+              strokeOpacity={isWinter ? "0.4" : "0.15"}
+              strokeLinecap="round"
+              strokeDasharray={isWinter ? "0" : "4 6"}
+            />
+          </g>
+        );
+      })}
+
       {quarterLayouts.map((quarter) => (
         <g key={quarter.id}>
           {quarter.buildings.map((b, i) => (

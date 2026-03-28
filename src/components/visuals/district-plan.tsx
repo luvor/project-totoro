@@ -69,6 +69,33 @@ export function DistrictPlanGraphic() {
         </g>
       ))}
 
+      {/* Transport corridor overlay — tram ring */}
+      <ellipse
+        cx="290" cy="220" rx="170" ry="140"
+        fill="none"
+        stroke="#06b6d4"
+        strokeWidth="3"
+        strokeDasharray="10 6"
+        strokeOpacity="0.3"
+      />
+      <ellipse
+        cx="290" cy="220" rx="172" ry="142"
+        fill="none"
+        stroke="#06b6d4"
+        strokeWidth="1"
+        strokeOpacity="0.12"
+      />
+      {/* Tram stop markers on the ring */}
+      {[
+        { x: 290, y: 80 }, { x: 460, y: 170 }, { x: 430, y: 340 },
+        { x: 290, y: 360 }, { x: 120, y: 310 }, { x: 122, y: 140 },
+      ].map((s, i) => (
+        <g key={`tram-stop-${i}`}>
+          <circle cx={s.x} cy={s.y} r="5" fill="#0f1d2c" stroke="#06b6d4" strokeWidth="1.5" strokeOpacity="0.5" />
+          <circle cx={s.x} cy={s.y} r="2" fill="#06b6d4" opacity="0.6" />
+        </g>
+      ))}
+
       <circle cx="290" cy="220" r="20" fill="#f0c27f" opacity="0.3" filter="url(#dp-glow)" />
       <circle cx="290" cy="220" r="12" fill="#f0c27f" opacity="0.7" />
       <circle cx="290" cy="220" r="6" fill="#0f1d2c" />
@@ -85,6 +112,8 @@ export function DistrictPlanGraphic() {
         <text x="135" y="4" fontSize="9" fill="#9eb3c2">Зелёная</text>
         <circle cx="195" cy="0" r="4" fill="#92bdd2" opacity="0.4" />
         <text x="205" y="4" fontSize="9" fill="#9eb3c2">Торговля</text>
+        <circle cx="270" cy="0" r="4" fill="none" stroke="#06b6d4" strokeWidth="1.5" strokeDasharray="2 1.5" />
+        <text x="280" y="4" fontSize="9" fill="#9eb3c2">Трамвай</text>
       </g>
     </svg>
   );

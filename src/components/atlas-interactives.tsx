@@ -876,8 +876,8 @@ export function SummerComfortScene() {
         </VisualFrame>
       </SchemaRenderToggle>
       <SchemaRenderToggle
-        renderSrc=""
-        renderAlt="Сезонный календарь — рендер в разработке"
+        renderSrc={`${basePath}/images/renders/seasonal-calendar.svg`}
+        renderAlt="Сезонный календарь — годовое кольцо четырёх операционных режимов района"
       >
         <VisualFrame
           title="Annual Climate Calendar"
@@ -891,10 +891,11 @@ export function SummerComfortScene() {
 }
 
 export function FlourishingShowcase() {
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
   return (
     <SchemaRenderToggle
-      renderSrc=""
-      renderAlt="Human Flourishing OS — рендер в разработке"
+      renderSrc={`${basePath}/images/renders/flourishing-os.svg`}
+      renderAlt="Human Flourishing OS — пять систем среды вокруг человека: свет, движение, зелень, belonging, тишина"
     >
       <VisualFrame
         title="Human Flourishing OS"

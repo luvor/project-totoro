@@ -1,0 +1,99 @@
+<svg viewBox="0 0 960 600" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Зонирование района — вид с высоты птичьего полёта">
+  <defs>
+    <linearGradient id="zl-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0b1826"/>
+      <stop offset="55%" stop-color="#122132"/>
+      <stop offset="100%" stop-color="#16283c"/>
+    </linearGradient>
+    <radialGradient id="zl-core" cx="50%" cy="46%" r="42%">
+      <stop offset="0%" stop-color="#f0c27f" stop-opacity="0.55"/>
+      <stop offset="45%" stop-color="#f0c27f" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#f0c27f" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="zl-blur"><feGaussianBlur stdDeviation="6"/></filter>
+  </defs>
+
+  <rect width="960" height="600" fill="url(#zl-sky)"/>
+
+  <!-- дальний снежный горизонт -->
+  <path d="M0 120 Q 180 90 340 112 T 700 104 T 960 118 V 0 H 0 Z" fill="#0a1522" opacity="0.9"/>
+  <path d="M0 132 Q 240 108 480 124 T 960 128" stroke="rgba(240,194,127,0.10)" stroke-width="2" fill="none"/>
+
+  <!-- тепловое свечение центра -->
+  <ellipse cx="480" cy="278" rx="330" ry="210" fill="url(#zl-core)"/>
+
+  <!-- кольцевая структура района -->
+  <g fill="none" stroke="rgba(255,255,255,0.10)">
+    <ellipse cx="480" cy="300" rx="300" ry="188" stroke-width="2"/>
+    <ellipse cx="480" cy="300" rx="212" ry="132" stroke-width="1.5"/>
+    <ellipse cx="480" cy="300" rx="120" ry="74" stroke-width="1.5"/>
+  </g>
+  <g stroke="rgba(255,255,255,0.07)" stroke-width="1.5">
+    <path d="M480 112 V 488"/>
+    <path d="M180 300 H 780"/>
+    <path d="M276 168 L 684 432"/>
+    <path d="M684 168 L 276 432"/>
+  </g>
+
+  <!-- зоны: жилые пояса -->
+  <g opacity="0.85">
+    <path d="M480 128 A 300 188 0 0 1 760 262 L 668 288 A 208 130 0 0 0 480 172 Z" fill="#315b73" opacity="0.55"/>
+    <path d="M200 262 A 300 188 0 0 1 480 128 L 480 172 A 208 130 0 0 0 292 288 Z" fill="#315b73" opacity="0.45"/>
+    <path d="M480 472 A 300 188 0 0 1 214 352 L 302 322 A 208 130 0 0 0 480 428 Z" fill="#315b73" opacity="0.5"/>
+  </g>
+  <!-- зелёный пояс -->
+  <path d="M746 352 A 300 188 0 0 1 480 472 L 480 428 A 208 130 0 0 0 658 322 Z" fill="#89b26e" opacity="0.4"/>
+  <!-- торговля / civic -->
+  <path d="M480 172 A 208 130 0 0 1 668 288 L 592 314 A 120 74 0 0 0 480 226 Z" fill="#92bdd2" opacity="0.4"/>
+  <path d="M292 288 A 208 130 0 0 1 480 172 L 480 226 A 120 74 0 0 0 368 314 Z" fill="#f0c27f" opacity="0.34"/>
+
+  <!-- климатический собор в центре -->
+  <g filter="url(#zl-blur)">
+    <ellipse cx="480" cy="300" rx="58" ry="36" fill="#f0c27f" opacity="0.5"/>
+  </g>
+  <ellipse cx="480" cy="300" rx="44" ry="27" fill="#f6d9a8" opacity="0.85"/>
+  <ellipse cx="480" cy="300" rx="20" ry="12" fill="#fff2d9"/>
+
+  <!-- микрокварталы -->
+  <g fill="rgba(255,255,255,0.16)">
+    <rect x="404" y="206" width="18" height="10" rx="2"/>
+    <rect x="432" y="196" width="14" height="9" rx="2"/>
+    <rect x="518" y="200" width="16" height="10" rx="2"/>
+    <rect x="552" y="214" width="14" height="9" rx="2"/>
+    <rect x="592" y="252" width="18" height="10" rx="2"/>
+    <rect x="352" y="252" width="16" height="10" rx="2"/>
+    <rect x="330" y="330" width="18" height="10" rx="2"/>
+    <rect x="420" y="380" width="16" height="10" rx="2"/>
+    <rect x="524" y="386" width="18" height="10" rx="2"/>
+    <rect x="600" y="344" width="14" height="9" rx="2"/>
+  </g>
+
+  <!-- деревья зелёного пояса -->
+  <g fill="#89b26e" opacity="0.55">
+    <circle cx="636" cy="404" r="6"/>
+    <circle cx="662" cy="388" r="5"/>
+    <circle cx="608" cy="418" r="5"/>
+    <circle cx="576" cy="432" r="6"/>
+    <circle cx="546" cy="444" r="5"/>
+  </g>
+
+  <!-- лёгкая дымка -->
+  <path d="M0 470 Q 240 440 480 462 T 960 452 V 600 H 0 Z" fill="#0a1420" opacity="0.75"/>
+  <path d="M0 500 Q 320 476 640 494 T 960 488 V 600 H 0 Z" fill="#081018" opacity="0.8"/>
+
+  <!-- подпись-легенда -->
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <text x="60" y="546" fill="rgba(255,255,255,0.75)" font-size="20" font-weight="600">Зонирование района</text>
+    <text x="60" y="570" fill="rgba(255,255,255,0.45)" font-size="13">Жилые пояса · civic-ядро · зелёный пояс · тепловое кольцо</text>
+    <g font-size="12" fill="rgba(255,255,255,0.55)">
+      <rect x="700" y="532" width="12" height="12" rx="3" fill="#315b73"/>
+      <text x="718" y="542">Жильё</text>
+      <rect x="700" y="552" width="12" height="12" rx="3" fill="#89b26e" opacity="0.7"/>
+      <text x="718" y="562">Зелень</text>
+      <rect x="780" y="532" width="12" height="12" rx="3" fill="#f0c27f" opacity="0.7"/>
+      <text x="798" y="542">Civic</text>
+      <rect x="780" y="552" width="12" height="12" rx="3" fill="#92bdd2" opacity="0.7"/>
+      <text x="798" y="562">Торговля</text>
+    </g>
+  </g>
+</svg>

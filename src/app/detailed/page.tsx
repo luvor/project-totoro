@@ -147,8 +147,8 @@ export default function DetailedPage() {
               <DistrictPlanGraphic />
             </SchemaRenderToggle>
             <SchemaRenderToggle
-              renderSrc=""
-              renderAlt="Зонирование района — рендер в разработке"
+              renderSrc={`${basePath}/images/renders/zone-layout.svg`}
+              renderAlt="Зонирование района — жилые пояса, civic-ядро и зелёный пояс вокруг теплового кольца"
             >
               <ZoneLayoutGraphic />
             </SchemaRenderToggle>
@@ -180,8 +180,8 @@ export default function DetailedPage() {
         >
           <MachineSwitcher machines={machines} />
           <SchemaRenderToggle
-            renderSrc=""
-            renderAlt="Климатические режимы — рендер в разработке"
+            renderSrc={`${basePath}/images/renders/climate-modes.svg`}
+            renderAlt="Климатические режимы — зима, лето, буран и ночь одного района"
           >
             <ClimateModesGraphic />
           </SchemaRenderToggle>
@@ -236,8 +236,8 @@ export default function DetailedPage() {
             </div>
           </div>
           <SchemaRenderToggle
-            renderSrc=""
-            renderAlt="Метрики процветания — рендер в разработке"
+            renderSrc={`${basePath}/images/renders/flourishing-metrics.svg`}
+            renderAlt="Метрики процветания — 15-минутная доступность, правило 3-30-300 и тёплые маршруты"
           >
             <MetricsInfographic />
           </SchemaRenderToggle>

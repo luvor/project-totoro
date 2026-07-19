@@ -1,4 +1,4 @@
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
 
@@ -41,6 +41,23 @@ function assertFields(records, fields, label) {
   for (const record of records) {
     for (const field of fields) {
       assert(record[field] !== undefined && record[field] !== null && record[field] !== "", `${label}: "${record.id}" missing "${field}"`);
+    }
+  }
+}
+
+async function assertJsxSourceIds(sourceIds) {
+  // Ловим литеральные sourceIds={["..."]} в JSX — JSON-контент проверяет assertSources,
+  // а захардкоженные массивы в страницах иначе молча отфильтруются в getSourceLinks
+  const entries = await readdir(path.join(root, "src"), { recursive: true });
+  for (const entry of entries) {
+    if (!entry.endsWith(".tsx")) {
+      continue;
+    }
+    const code = await readFile(path.join(root, "src", entry), "utf8");
+    for (const match of code.matchAll(/sourceIds=\{\[([^\]]*)\]\}/gs)) {
+      for (const [, sourceId] of match[1].matchAll(/"([^"]+)"/g)) {
+        assert(sourceIds.has(sourceId), `src/${entry}: unknown source "${sourceId}" in JSX sourceIds`);
+      }
     }
   }
 }
@@ -94,6 +111,7 @@ async function main() {
   assertSources(metrics, sourceIds, "metrics");
   assertSources(machines, sourceIds, "machines");
   assertSources(variants, sourceIds, "variants");
+  await assertJsxSourceIds(sourceIds);
 
   assert(Array.isArray(district.whyReal) && district.whyReal.length >= 3, "district: whyReal must have at least 3 bullets");
   assert(Array.isArray(district.promises) && district.promises.length >= 5, "district: promises must have at least 5 entries");
